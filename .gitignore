@@ -1,0 +1,9 @@
+Items & Materials/
+*.zip
+*.rar
+.idea/
+__pycache__/
+Documentation/
+Stylesheets/
+TEST.py
+mainForm_TEST.ui

@@ -1,0 +1,304 @@
+{
+  "Edge Detection": {
+    "Canny": {
+      "spinBox1": {
+        "name": "first thresh",
+        "value": 127,
+        "step": 1,
+        "min": 0,
+        "max": 255
+      },
+      "spinBox2": {
+        "name": "second thresh",
+        "value": 175,
+        "step": 1,
+        "min": 0,
+        "max": 255
+      }
+    },
+    "Laplacian": {},
+    "Sobel": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Sobel X": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Sobel Y": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Scharr X": {},
+    "Scharr Y": {},
+    "Simple Thresholding": {
+      "spinBox1": {
+        "name": "thresh",
+        "value": 175,
+        "step": 1,
+        "min": 0,
+        "max": 255
+      }
+    },
+    "Adaptive Thresholding": {
+      "spinBox1": {
+        "name": "area",
+        "value": 127,
+        "step": 2,
+        "min": 1,
+        "max": 99
+      },
+      "spinBox2": {
+        "name": "const",
+        "value": 175,
+        "step": 1,
+        "min": 0,
+        "max": 200
+      }
+    }
+  },
+  "Blur": {
+    "Average": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Gaussian": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Median": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Bilateral": {
+      "spinBox1": {
+        "name": "filter size",
+        "value": 1,
+        "step": 1,
+        "min": 1,
+        "max": 9
+      },
+      "spinBox2": {
+        "name": "sigma color",
+        "value": 75,
+        "step": 1,
+        "min": 1,
+        "max": 255
+      },
+      "spinBox3": {
+        "name": "sigma space",
+        "value": 75,
+        "step": 1,
+        "min": 1,
+        "max": 255
+      }
+    }
+  },
+  "Morphology": {
+    "Open": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Close": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Gradient": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 3,
+        "step": 2,
+        "min": 1,
+        "max": 31
+      }
+    },
+    "Dilate": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 1,
+        "step": 1,
+        "min": 1,
+        "max": 25
+      },
+      "spinBox2": {
+        "name": "iterations",
+        "value": 1,
+        "step": 1,
+        "min": 1,
+        "max": 10
+      }
+    },
+    "Erode": {
+      "spinBox1": {
+        "name": "kernel size",
+        "value": 1,
+        "step": 1,
+        "min": 1,
+        "max": 25
+      },
+      "spinBox2": {
+        "name": "iterations",
+        "value": 3,
+        "step": 1,
+        "min": 1,
+        "max": 10
+      }
+    }
+  },
+  "Kernel":{
+    "Sharpen":
+    {
+    "spinBoxKernel1": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel2": {
+        "value": -1,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel3": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel4": {
+        "value": -1,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel5": {
+        "value": 5,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel6": {
+        "value": -1,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel7": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel8": {
+        "value": -1,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel9": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      }
+    },
+    "My Variant":
+    {
+    "spinBoxKernel1": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel2": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel3": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel4": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel5": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel6": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel7": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel8": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      },
+      "spinBoxKernel9": {
+        "value": 0,
+        "step": 1,
+        "min": -10,
+        "max": 10
+      }
+    }
+  }
+}

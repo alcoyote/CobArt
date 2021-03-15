@@ -1,0 +1,1303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1280</width>
+    <height>720</height>
+   </size>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>CobArt</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>32</width>
+    <height>32</height>
+   </size>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1280</width>
+      <height>720</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Calibri</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tabImageProcessing">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <attribute name="title">
+      <string>Image Processing</string>
+     </attribute>
+     <widget class="QLabel" name="pictureBoxOutput">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>900</width>
+        <height>630</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBoxOriginal">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>0</y>
+        <width>320</width>
+        <height>200</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Original Image</string>
+      </property>
+      <widget class="QLabel" name="pictureBoxOriginal">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>20</y>
+         <width>291</width>
+         <height>171</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="lineWidth">
+        <number>1</number>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBoxHistory">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>200</y>
+        <width>320</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="title">
+       <string>History</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <widget class="QListWidget" name="listBoxImages">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>300</width>
+         <height>120</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::NoDragDrop</enum>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>90</width>
+         <height>63</height>
+        </size>
+       </property>
+       <property name="viewMode">
+        <enum>QListView::ListMode</enum>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buttonRemove">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>145</y>
+         <width>120</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Calibri</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+       </property>
+       <property name="text">
+        <string>Remove</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buttonClear">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>145</y>
+         <width>120</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Calibri</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+       </property>
+       <property name="text">
+        <string>Clear</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBoxCommands">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>380</y>
+        <width>320</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Commands</string>
+      </property>
+      <widget class="QComboBox" name="comboBoxCategory">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>300</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift SemiLight</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+}
+
+QComboBox:editable {
+    background: white;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left-width: 1px;
+    border-left-color:white;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 10px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 10px;
+}
+QComboBox::down-arrow {
+    image: url(D:/Work/Diploma Project/Application/Alternative Cobot/Resource/arrow1.png);
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBoxType">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>300</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift SemiLight</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+}
+
+QComboBox:editable {
+    background: white;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left-width: 1px;
+    border-left-color:white;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 10px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 10px;
+}
+QComboBox::down-arrow {
+    image: url(D:/Work/Diploma Project/Application/Alternative Cobot/Resource/arrow1.png);
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel1">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>80</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel2">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>80</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel3">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>80</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel4">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>110</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel5">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>110</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel6">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>110</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel7">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>140</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel8">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>140</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxKernel9">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>140</y>
+         <width>42</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox1">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox4">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>170</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>200</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buttonApply">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>230</y>
+         <width>120</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Calibri</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+       </property>
+       <property name="text">
+        <string>Apply</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>80</y>
+         <width>171</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>110</y>
+         <width>171</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label3">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>140</y>
+         <width>171</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label4">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>170</y>
+         <width>171</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label5">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>200</y>
+         <width>171</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="buttonLoadImage">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>120</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>Load Image</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="buttonPhoto">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>0</y>
+        <width>120</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>Photo</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="buttonSaveImage">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>0</y>
+        <width>120</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabRobotInteraction">
+     <attribute name="title">
+      <string>Robot Interaction</string>
+     </attribute>
+     <widget class="QLabel" name="pictureBoxOutput2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>900</width>
+        <height>630</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBoxContours">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>200</y>
+        <width>320</width>
+        <height>231</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Contours detection</string>
+      </property>
+      <widget class="QSpinBox" name="spinBoxThreshold">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>500</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelContours1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>20</y>
+         <width>231</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Threshold</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textBoxTotal">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textBoxClean">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>170</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelContours3">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>140</y>
+         <width>231</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Total number of contours </string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelContours4">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>170</y>
+         <width>231</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Number of &quot;clean&quot; contours </string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxArea">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>500</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelContours2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>50</y>
+         <width>231</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Screening area</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_internal">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>301</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Remove external contours</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_external">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>301</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Remove internal contours</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_hatching">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>200</y>
+         <width>301</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Hatch</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBoxProcessed">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>0</y>
+        <width>320</width>
+        <height>200</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Processed Image</string>
+      </property>
+      <widget class="QLabel" name="pictureBoxProcessed">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>20</y>
+         <width>291</width>
+         <height>171</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="lineWidth">
+        <number>1</number>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBoxRobot">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>430</y>
+        <width>321</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Robot parameters</string>
+      </property>
+      <widget class="QLineEdit" name="textBoxIP">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>151</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>10.10.10.20:8081</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelRobot1">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>20</y>
+         <width>121</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>IP-adress</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBoxSpeed">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>61</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelRobot2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>50</y>
+         <width>191</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Speed</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="buttonFindInitPosition">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>1040</x>
+        <y>520</y>
+        <width>120</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>Find Init Position</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="buttonDraw">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>1040</x>
+        <y>560</y>
+        <width>120</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>Draw</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="buttonStop">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>1040</x>
+        <y>600</y>
+        <width>120</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: black;
+selection-background-color: rgb(227, 227, 227);
+border-color: rgb(0, 0, 0);
+background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 10px;
+border-color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>STOP!</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
