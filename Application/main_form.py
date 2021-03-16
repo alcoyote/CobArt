@@ -38,9 +38,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonDraw.clicked.connect(self.__Draw)
         self.buttonStop.clicked.connect(self.__Stop)
 
-        # PictureBoxes
-        # ListBoxes
-
         # ComboBoxes
         self.command_list = {'Blur': ["Average", "Bilateral", "Gaussian", "Median"],
                              'Kernel': ["Sharpen", "My Variant"],
@@ -51,8 +48,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.__SetComboboxItems(category=self.comboBoxCategory.currentText())
         self.comboBoxCategory.currentTextChanged.connect(self.__ComboboxCategoryChanged)
         self.comboBoxType.currentTextChanged.connect(self.__ComboboxTypeChanged)
-
-        # Labels
 
         # SpinBoxes
         self.spinBoxThreshold.valueChanged.connect(self.__FindContours)
@@ -179,7 +174,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         #     else:
         #         return
 
-    def __DefineImageOrientation(self):
+    def __DefineImageOrientation(self):  # пока нигде не используется
         height, width = self.image_process.original_image.shape[:2]
         if height >= width:
             orientation = True  # вертикально

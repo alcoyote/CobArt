@@ -23,7 +23,8 @@ def Draw(ip, speed, x, y, z, clean_contours):
                                             y + (clean_contours[i][0][0][1] * 0.0002),
                                             z),
                                       Rotation(3.1415, 0, 0))], speed, MT_JOINT)  # в начало контура, не опускаемся
-        # --- ТЕСТ НИЖЕ ВМЕСТО ЭТОГО ЦИКЛА --- ТЕСТ НИЖЕ ВМЕСТО ЭТОГО ЦИКЛА --- ТЕСТ НИЖЕ ВМЕСТО ЭТОГО ЦИКЛА --- #
+
+        # --- ПЕРВЫЙ ВАРИАНТ РИСОВАНИЯ, ПОДАЧА РОБОТУ ПО ОДНОЙ ТОЧКЕ --- #
         # for j in range(len(clean_contours[i])):
         #     if j % 2 == 0:
         #         robot.run_positions([Position(Point(x + (clean_contours[i][j][0][0] * 0.0002),
@@ -31,7 +32,7 @@ def Draw(ip, speed, x, y, z, clean_contours):
         #                                             z - 0.105),
         #                                       Rotation(3.1415, 0, 0))], speed, MT_JOINT)
 
-        # --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- ТЕСТ --- #
+        # --- ТЕСТОВЫЙ ВАРИАНТ РИСОВАНИЯ, ПОДАЧА РОБОТУ ЦЕЛЫХ МАССИВОВ ТОЧЕК --- #
         for j in range(len(clean_contours[i])):
             x_list.append(x + (clean_contours[i][j][0][0] * 0.0002))
             y_list.append(y + (clean_contours[i][j][0][1] * 0.0002))
@@ -41,7 +42,7 @@ def Draw(ip, speed, x, y, z, clean_contours):
                                       Rotation(3.1415, 0, 0))], speed, MT_JOINT)
         x_list.clear()
         y_list.clear()
-        # --- КОНЕЦ ТЕСТА --- КОНЕЦ ТЕСТА --- КОНЕЦ ТЕСТА --- КОНЕЦ ТЕСТА --- КОНЕЦ ТЕСТА --- КОНЕЦ ТЕСТА --- #
+        # ------------------------------------------------------------------- -- #
 
         robot.run_positions([Position(Point(x + (clean_contours[i][0][0][0] * 0.0002),
                                             y + (clean_contours[i][0][0][1] * 0.0002),
