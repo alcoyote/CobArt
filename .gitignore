@@ -5,5 +5,4 @@ Items & Materials/
 __pycache__/
 Documentation/
 Stylesheets/
-TEST.py
-mainForm_TEST.ui
+Test/

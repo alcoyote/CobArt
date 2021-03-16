@@ -46,8 +46,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                              'Kernel': ["Sharpen", "My Variant"],
                              'Edge Detection': ["Canny", "Laplacian", "Sobel X", "Sobel Y", "Sobel", "Scharr X",
                                                 "Scharr Y", "Simple Thresholding", "Adaptive Thresholding"],
-                             'Morphology': ["Dilate", "Erode", "Close", "Open", "Gradient"]
-                             }
+                             'Morphology': ["Dilate", "Erode", "Close", "Open", "Gradient"]}
         self.comboBoxCategory.addItems(self.command_list.keys())
         self.__SetComboboxItems(category=self.comboBoxCategory.currentText())
         self.comboBoxCategory.currentTextChanged.connect(self.__ComboboxCategoryChanged)
@@ -75,6 +74,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self.__SetImagePictureBoxOutput('Data/Temp/Original.jpg')
             self.__SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
             self.listBoxImages.clear()
+            # self.__ResizeImage()  # тест
         else:
             return
 
@@ -161,6 +161,32 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         event.accept()
 
     # IMAGE PROCESSING FUNCTIONAL
+    def __ResizeImage(self):
+        pass
+        # height, width = self.image_process.original_image.shape[:2]
+        # orientation = self.__DefineImageOrientation()
+        # if orientation:
+        #     if height > 800 or width > 525:
+        #         print(self.image_process.original_image.shape[:2])  # тест
+        #         self.image_process.original_image = cv2.resize(self.image_process.original_image, None, fx=800/height,
+        #                                                        fy=525/width)  # тест
+        #         print(self.image_process.original_image.shape[:2])  # тест
+        #     else:
+        #         return
+        # elif not orientation:
+        #     if height > 525 or width > 800:
+        #         pass
+        #     else:
+        #         return
+
+    def __DefineImageOrientation(self):
+        height, width = self.image_process.original_image.shape[:2]
+        if height >= width:
+            orientation = True  # вертикально
+        elif height < width:
+            orientation = False  # горизонтально
+        return orientation
+
     def __SetComboboxItems(self, category):
         self.comboBoxType.clear()
         self.comboBoxType.addItems(self.command_list[category])
@@ -182,8 +208,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pictureBoxOriginal.setPixmap(self.pixmap)
 
     def __SetImagePictureBoxOutput(self, image_path):
-        # Picture Box Output
         self.pixmap = QPixmap(QImage(image_path))
+        # Picture Box Output
         self.pixmap = self.pixmap.scaled(self.pictureBoxOutput.size(), Qt.KeepAspectRatio)
         self.pictureBoxOutput.setAlignment(Qt.AlignCenter)
         self.pictureBoxOutput.setPixmap(self.pixmap)
