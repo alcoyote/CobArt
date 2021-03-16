@@ -69,7 +69,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self.__SetImagePictureBoxOutput('Data/Temp/Original.jpg')
             self.__SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
             self.listBoxImages.clear()
-            # self.__ResizeImage()  # тест
         else:
             return
 
@@ -156,31 +155,27 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         event.accept()
 
     # IMAGE PROCESSING FUNCTIONAL
-    def __ResizeImage(self):
-        pass
-        # height, width = self.image_process.original_image.shape[:2]
-        # orientation = self.__DefineImageOrientation()
-        # if orientation:
-        #     if height > 800 or width > 525:
-        #         print(self.image_process.original_image.shape[:2])  # тест
-        #         self.image_process.original_image = cv2.resize(self.image_process.original_image, None, fx=800/height,
-        #                                                        fy=525/width)  # тест
-        #         print(self.image_process.original_image.shape[:2])  # тест
-        #     else:
-        #         return
-        # elif not orientation:
-        #     if height > 525 or width > 800:
-        #         pass
-        #     else:
-        #         return
-
-    def __DefineImageOrientation(self):  # пока нигде не используется
+    def __DefineImageOrientation(self):
         height, width = self.image_process.original_image.shape[:2]
         if height >= width:
-            orientation = True  # вертикально
+            orientation = True  # вертикальная ориентация
         elif height < width:
-            orientation = False  # горизонтально
+            orientation = False  # горизонтальная ориентация
         return orientation
+
+    def __ResizeImage(self):  # незаконченная ф-я. Вызывать после загрузки изображения или перед выделением контуров?
+        height, width = self.image_process.original_image.shape[:2]
+        orientation = self.__DefineImageOrientation()
+        if orientation:
+            if height > 800 or width > 525:  # цифры 800 и 525 в дальнейшем, возможно, поменяются
+                pass
+            else:
+                return
+        elif not orientation:
+            if height > 525 or width > 800:
+                pass
+            else:
+                return
 
     def __SetComboboxItems(self, category):
         self.comboBoxType.clear()
