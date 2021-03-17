@@ -129,8 +129,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self.__SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
 
     def __ButtonClearClicked(self):
-        for i in range(len(self.image_process.temp_images)):
-            os.remove(f'Data/Temp/Temp{i}.jpg')
+        for index in range(len(self.image_process.temp_images)):
+            os.remove(f'Data/Temp/Temp{index}.jpg')
+            self.image_process.temp_images.clear()
         self.listBoxImages.clear()
         self.__SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
         self.__SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
@@ -155,28 +156,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         event.accept()
 
     # IMAGE PROCESSING FUNCTIONAL
-    def __DefineImageOrientation(self):
-        height, width = self.image_process.original_image.shape[:2]
-        if height >= width:
-            orientation = True  # вертикальная ориентация
-        elif height < width:
-            orientation = False  # горизонтальная ориентация
-        return orientation
-
-    def __ResizeImage(self):  # незаконченная ф-я. Вызывать после загрузки изображения или перед выделением контуров?
-        height, width = self.image_process.original_image.shape[:2]
-        orientation = self.__DefineImageOrientation()
-        if orientation:
-            if height > 800 or width > 525:  # цифры 800 и 525 в дальнейшем, возможно, поменяются
-                pass
-            else:
-                return
-        elif not orientation:
-            if height > 525 or width > 800:
-                pass
-            else:
-                return
-
     def __SetComboboxItems(self, category):
         self.comboBoxType.clear()
         self.comboBoxType.addItems(self.command_list[category])
@@ -371,6 +350,28 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_process.kernel.MyVariant(self.image_process.image,
                                                     self.image_process.temp_images[index]['matrix'])
 
+    def __DefineImageOrientation(self):
+        height, width = self.image_process.original_image.shape[:2]
+        if height >= width:
+            orientation = True  # вертикальная ориентация
+        elif height < width:
+            orientation = False  # горизонтальная ориентация
+        return orientation
+
+    def __ResizeImage(self):  # незаконченная ф-я. Вызывать (после загрузки изображения или) перед выделением контуров?
+        height, width = self.image_process.original_image.shape[:2]
+        orientation = self.__DefineImageOrientation()
+        if orientation:
+            if height > 800 or width > 525:  # цифры 800 и 525 в дальнейшем, возможно, поменяются
+                pass
+            else:
+                return
+        elif not orientation:
+            if height > 525 or width > 800:
+                pass
+            else:
+                return
+
     # ROBOT EVENTS AND FUNCTIONAL
     def __FindContours(self):
         if len(self.image_process.temp_images) == 0:
@@ -389,8 +390,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         return clean_contours
 
     def __FindInitPosition(self):
-        QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет поиск листа. "
-                                                  "Будьте осторожны.")
+        QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет поиск листа. Будьте осторожны.")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
         x = 0.583   # временная заглушка
