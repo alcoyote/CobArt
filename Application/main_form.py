@@ -25,18 +25,18 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Objects and Data
         self.image_process = ImageProcess()
-        self.method_parameters = self.__GetConfiguration()
+        self.method_parameters = self._GetConfiguration()
 
         # Buttons
-        self.buttonLoadImage.clicked.connect(self.__ButtonLoadImageClicked)
-        self.buttonPhoto.clicked.connect(self.__ButtonPhotoClicked)
-        self.buttonSaveImage.clicked.connect(self.__ButtonSaveImageClicked)
-        self.buttonApply.clicked.connect(self.__ButtonApplyClicked)
-        self.buttonRemove.clicked.connect(self.__ButtonRemoveClicked)
-        self.buttonClear.clicked.connect(self.__ButtonClearClicked)
-        self.buttonFindInitPosition.clicked.connect(self.__FindInitPosition)
-        self.buttonDraw.clicked.connect(self.__Draw)
-        self.buttonStop.clicked.connect(self.__Stop)
+        self.buttonLoadImage.clicked.connect(self._ButtonLoadImageClicked)
+        self.buttonPhoto.clicked.connect(self._ButtonPhotoClicked)
+        self.buttonSaveImage.clicked.connect(self._ButtonSaveImageClicked)
+        self.buttonApply.clicked.connect(self._ButtonApplyClicked)
+        self.buttonRemove.clicked.connect(self._ButtonRemoveClicked)
+        self.buttonClear.clicked.connect(self._ButtonClearClicked)
+        self.buttonFindInitPosition.clicked.connect(self._FindInitPosition)
+        self.buttonDraw.clicked.connect(self._Draw)
+        self.buttonStop.clicked.connect(self._Stop)
 
         # ComboBoxes
         self.command_list = {'Blur': ["Average", "Bilateral", "Gaussian", "Median"],
@@ -45,34 +45,34 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                                                 "Scharr Y", "Simple Thresholding", "Adaptive Thresholding"],
                              'Morphology': ["Dilate", "Erode", "Close", "Open", "Gradient"]}
         self.comboBoxCategory.addItems(self.command_list.keys())
-        self.__SetComboboxItems(category=self.comboBoxCategory.currentText())
-        self.comboBoxCategory.currentTextChanged.connect(self.__ComboboxCategoryChanged)
-        self.comboBoxType.currentTextChanged.connect(self.__ComboboxTypeChanged)
+        self._SetComboboxItems(category=self.comboBoxCategory.currentText())
+        self.comboBoxCategory.currentTextChanged.connect(self._ComboboxCategoryChanged)
+        self.comboBoxType.currentTextChanged.connect(self._ComboboxTypeChanged)
 
         # SpinBoxes
-        self.spinBoxThreshold.valueChanged.connect(self.__FindContours)
-        self.spinBoxArea.valueChanged.connect(self.__FindContours)
-        self.comboBoxType.activated[str].connect(self.__SetAccessKernelSpinBoxes)
-        self.__HideAllSpinBoxes()
-        self.__SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()]
+        self.spinBoxThreshold.valueChanged.connect(self._FindContours)
+        self.spinBoxArea.valueChanged.connect(self._FindContours)
+        self.comboBoxType.activated[str].connect(self._SetAccessKernelSpinBoxes)
+        self._HideAllSpinBoxes()
+        self._SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()]
                             [self.comboBoxType.currentText()])
 
     # IMAGE PROCESSING EVENTS
-    def __ButtonLoadImageClicked(self):
+    def _ButtonLoadImageClicked(self):
         self.image_path = QFileDialog.getOpenFileName(filter='Изображения (*.jpg *.jpeg *.png)')
         self.image_path = self.image_path[0]
         if len(self.image_path) > 0:
             self.image_process.image = cv2.imread(self.image_path)
             self.image_process.original_image = self.image_process.image
             cv2.imwrite('Data/Temp/Original.jpg', self.image_process.original_image)
-            self.__SetImagePictureBoxOriginal('Data/Temp/Original.jpg')
-            self.__SetImagePictureBoxOutput('Data/Temp/Original.jpg')
-            self.__SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
+            self._SetImagePictureBoxOriginal('Data/Temp/Original.jpg')
+            self._SetImagePictureBoxOutput('Data/Temp/Original.jpg')
+            self._SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
             self.listBoxImages.clear()
         else:
             return
 
-    def __ButtonPhotoClicked(self):
+    def _ButtonPhotoClicked(self):
         camera = cv2.VideoCapture(0)
         while True:
             ret, frame = camera.read()
@@ -82,14 +82,14 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_process.image = frame
                 self.image_process.original_image = frame
                 cv2.imwrite('Data/Temp/Original.jpg', self.image_process.original_image)
-                self.__SetImagePictureBoxOriginal('Data/Temp/Original.jpg')
-                self.__SetImagePictureBoxOutput('Data/Temp/Original.jpg')
-                self.__SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
+                self._SetImagePictureBoxOriginal('Data/Temp/Original.jpg')
+                self._SetImagePictureBoxOutput('Data/Temp/Original.jpg')
+                self._SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
                 break
         camera.release()
         cv2.destroyAllWindows()
 
-    def __ButtonSaveImageClicked(self):
+    def _ButtonSaveImageClicked(self):
         self.image_process.image = cv2.imread(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
         self.image_path = QFileDialog.getSaveFileName(filter='JPG (*.jpg);; PNG (*.png)')
         self.image_path = self.image_path[0]
@@ -98,52 +98,53 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             return
 
-    def __ButtonApplyClicked(self):
+    def _ButtonApplyClicked(self):
         category = self.comboBoxCategory.currentText()
         name = self.comboBoxType.currentText()
-        text, method = self.__GetMethodInfo(self.comboBoxCategory.currentText(), self.comboBoxType.currentText(),
-                                            self.method_parameters[self.comboBoxCategory.currentText()]
+        text, method = self._GetMethodInfo(self.comboBoxCategory.currentText(), self.comboBoxType.currentText(),
+                                           self.method_parameters[self.comboBoxCategory.currentText()]
                                             [self.comboBoxType.currentText()])
         self.image_process.temp_images.append(method)
-        self.__ApplyMethod(category, name, len(self.image_process.temp_images) - 1)
+        self._ApplyMethod(category, name, len(self.image_process.temp_images) - 1)
         cv2.imwrite(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg', self.image_process.image)
-        self.__SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-        self.__SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-        self.__SetListboxItem(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg', text)
+        self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+        self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+        self._SetListboxItem(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg', text)
 
-    def __ButtonRemoveClicked(self):
+    def _ButtonRemoveClicked(self):
         index = self.listBoxImages.currentRow()
         self.image_process.temp_images.pop(index)
         self.image_process.image = self.image_process.original_image
         self.listBoxImages.takeItem(index)
         for index in range(len(self.image_process.temp_images)):
-            self.__ApplyMethod(self.image_process.temp_images[index]['category'],
-                               self.image_process.temp_images[index]['name'],
-                               index)
+            self._ApplyMethod(self.image_process.temp_images[index]['category'],
+                              self.image_process.temp_images[index]['name'],
+                              index)
             cv2.imwrite(f'Data/Temp/Temp{index}.jpg', self.image_process.image)
         if self.image_process.temp_images:
-            self.__SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-            self.__SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+            self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+            self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
         else:
-            self.__SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
-            self.__SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
+            self._SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
+            self._SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
 
-    def __ButtonClearClicked(self):
+    def _ButtonClearClicked(self):
         for index in range(len(self.image_process.temp_images)):
             os.remove(f'Data/Temp/Temp{index}.jpg')
             self.image_process.temp_images.clear()
         self.listBoxImages.clear()
-        self.__SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
-        self.__SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
+        self.image_process.image = self.image_process.original_image
+        self._SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
+        self._SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
 
-    def __ComboboxCategoryChanged(self, value):
-        self.__SetComboboxItems(category=value)
+    def _ComboboxCategoryChanged(self, value):
+        self._SetComboboxItems(category=value)
 
-    def __ComboboxTypeChanged(self, value):
+    def _ComboboxTypeChanged(self, value):
         if self.comboBoxType.count() == 0:
             return
-        self.__HideAllSpinBoxes()
-        self.__SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()][value])
+        self._HideAllSpinBoxes()
+        self._SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()][value])
 
     def closeEvent(self, event):
         if len(self.image_process.temp_images) > 0:
@@ -156,11 +157,11 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         event.accept()
 
     # IMAGE PROCESSING FUNCTIONAL
-    def __SetComboboxItems(self, category):
+    def _SetComboboxItems(self, category):
         self.comboBoxType.clear()
         self.comboBoxType.addItems(self.command_list[category])
 
-    def __SetListboxItem(self, image_path, text):
+    def _SetListboxItem(self, image_path, text):
         self.pixmap = QPixmap(QImage(image_path))
         self.pixmap = self.pixmap.scaled(self.listBoxImages.iconSize(), Qt.KeepAspectRatio)
         item = QListWidgetItem()
@@ -169,14 +170,14 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         item.setToolTip(text)
         self.listBoxImages.addItem(item)
 
-    def __SetImagePictureBoxOriginal(self, image_path):
+    def _SetImagePictureBoxOriginal(self, image_path):
         # Picture Box Original
         self.pixmap = QPixmap(QImage(image_path))
         self.pixmap = self.pixmap.scaled(self.pictureBoxOriginal.size(), Qt.KeepAspectRatio)
         self.pictureBoxOriginal.setAlignment(Qt.AlignCenter)
         self.pictureBoxOriginal.setPixmap(self.pixmap)
 
-    def __SetImagePictureBoxOutput(self, image_path):
+    def _SetImagePictureBoxOutput(self, image_path):
         self.pixmap = QPixmap(QImage(image_path))
         # Picture Box Output
         self.pixmap = self.pixmap.scaled(self.pictureBoxOutput.size(), Qt.KeepAspectRatio)
@@ -187,14 +188,14 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pictureBoxProcessed.setAlignment(Qt.AlignCenter)
         self.pictureBoxProcessed.setPixmap(self.pixmap)
 
-    def __SetImagePictureBoxOutput2(self, image_path):
+    def _SetImagePictureBoxOutput2(self, image_path):
         # Picture Box Output 2
         self.pixmap = QPixmap(QImage(image_path))
         self.pixmap = self.pixmap.scaled(self.pictureBoxOutput2.size(), Qt.KeepAspectRatio)
         self.pictureBoxOutput2.setAlignment(Qt.AlignCenter)
         self.pictureBoxOutput2.setPixmap(self.pixmap)
 
-    def __GetMethodInfo(self, category, name, parameters=dict):
+    def _GetMethodInfo(self, category, name, parameters=dict):
         text = [category]
         method = {'category': category, 'name': name}
         for key in parameters.keys():
@@ -205,29 +206,29 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 text.append(f"{parameters[key]['name']}: {stream.getvalue()}")
                 method[parameters[key]['name']] = int(stream.getvalue())
         if category == "Kernel":
-            text.append(f"matrix:\n {self.__GetKernel()}")
-            method['matrix'] = self.__GetKernel()
+            text.append(f"matrix:\n {self._GetKernel()}")
+            method['matrix'] = self._GetKernel()
         text = "; ".join(text)
         return text, method
 
-    def __GetConfiguration(self):
+    def _GetConfiguration(self):
         with open('Data/Parameters.json') as file:
             data = json.load(file)
         return data
 
-    def __GetKernel(self):
+    def _GetKernel(self):
         return np.array([[self.spinBoxKernel1.value(), self.spinBoxKernel2.value(), self.spinBoxKernel3.value()],
                          [self.spinBoxKernel4.value(), self.spinBoxKernel5.value(), self.spinBoxKernel6.value()],
                          [self.spinBoxKernel7.value(), self.spinBoxKernel8.value(), self.spinBoxKernel9.value()]])
 
-    def __HideAllSpinBoxes(self):
+    def _HideAllSpinBoxes(self):
         for i in range(1, 10):
             if i < 6:
                 exec(f'self.label{i}.hide()')
                 exec(f'self.spinBox{i}.hide()')
             exec(f'self.spinBoxKernel{i}.hide()')
 
-    def __SetSpinBoxes(self, spinboxes=dict):
+    def _SetSpinBoxes(self, spinboxes=dict):
         for key, values in spinboxes.items():
             if key[:len(key) - 1] == 'spinBox':
                 number = re.search(r'\d+', key).group(0)
@@ -239,7 +240,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             exec(f'self.{key}.setValue({values["value"]})')
             exec(f'self.{key}.show()')
 
-    def __SetAccessKernelSpinBoxes(self):
+    def _SetAccessKernelSpinBoxes(self):
         if self.comboBoxType.currentText() == "Sharpen":
             for i in range(1, 10):
                 exec(f'self.spinBoxKernel{i}.setEnabled(False)')
@@ -247,17 +248,17 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             for i in range(1, 10):
                 exec(f'self.spinBoxKernel{i}.setEnabled(True)')
 
-    def __ApplyMethod(self, category, name, index):
+    def _ApplyMethod(self, category, name, index):
         if category == "Blur":
-            self.__ApplyBlurMethod(name, index)
+            self._ApplyBlurMethod(name, index)
         elif category == "Edge Detection":
-            self.__ApplyEdgeDetectionMethod(name, index)
+            self._ApplyEdgeDetectionMethod(name, index)
         elif category == "Morphology":
-            self.__ApplyMorphologyMethod(name, index)
+            self._ApplyMorphologyMethod(name, index)
         elif category == "Kernel":
-            self.__ApplyKernelMethod(name, index)
+            self._ApplyKernelMethod(name, index)
 
-    def __ApplyBlurMethod(self, name, index):
+    def _ApplyBlurMethod(self, name, index):
         if name == "Average":
             self.image_process.image = \
                 self.image_process.blur.Average(image=self.image_process.image,
@@ -277,7 +278,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_process.blur.Median(image=self.image_process.image,
                                                ksize=self.image_process.temp_images[index]['kernel size'])
 
-    def __ApplyEdgeDetectionMethod(self, name, index):
+    def _ApplyEdgeDetectionMethod(self, name, index):
         if name == "Canny":
             self.image_process.image = \
                 self.image_process.edge_detection.Canny(image=self.image_process.image,
@@ -311,7 +312,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 area=self.image_process.temp_images[index]['area'],
                 const=self.image_process.temp_images[index]['const'])
 
-    def __ApplyMorphologyMethod(self, name, index):
+    def _ApplyMorphologyMethod(self, name, index):
         if name == "Open":
             self.image_process.image = \
                 self.image_process.morphology.Open(
@@ -340,7 +341,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                     ksize=self.image_process.temp_images[index]['kernel size'],
                     iterations=self.image_process.temp_images[index]['iterations'])
 
-    def __ApplyKernelMethod(self, name, index):
+    def _ApplyKernelMethod(self, name, index):
         if name == "Sharpen":
             self.image_process.image = \
                 self.image_process.kernel.Sharpen(self.image_process.image,
@@ -350,7 +351,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_process.kernel.MyVariant(self.image_process.image,
                                                     self.image_process.temp_images[index]['matrix'])
 
-    def __DefineImageOrientation(self):
+    def _DefineImageOrientation(self):
         height, width = self.image_process.original_image.shape[:2]
         if height >= width:
             orientation = True  # вертикальная ориентация
@@ -358,9 +359,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             orientation = False  # горизонтальная ориентация
         return orientation
 
-    def __ResizeImage(self):  # незаконченная ф-я. Вызывать (после загрузки изображения или) перед выделением контуров?
+    def _ResizeImage(self):  # незаконченная ф-я. Вызывать (после загрузки изображения или) перед выделением контуров?
         height, width = self.image_process.original_image.shape[:2]
-        orientation = self.__DefineImageOrientation()
+        orientation = self._DefineImageOrientation()
         if orientation:
             if height > 800 or width > 525:  # цифры 800 и 525 в дальнейшем, возможно, поменяются
                 pass
@@ -373,7 +374,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 return
 
     # ROBOT EVENTS AND FUNCTIONAL
-    def __FindContours(self):
+    def _FindContours(self):
         if len(self.image_process.temp_images) == 0:
             self.image_process.image = cv2.imread('Data/Temp/Original.jpg')
         else:
@@ -386,10 +387,10 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.textBoxTotal.setText(str(len(contours)))
         self.textBoxClean.setText(str(len(clean_contours)))
         cv2.imwrite('Data/Temp/Contours.jpg', self.image_process.image)
-        self.__SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
+        self._SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
         return clean_contours
 
-    def __FindInitPosition(self):
+    def _FindInitPosition(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет поиск листа. Будьте осторожны.")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
@@ -399,22 +400,22 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         FindInitPosition(ip, speed, x, y, z)
         QMessageBox.about(self, " ", "Робот в начальной позиции и готов к рисованию.")
 
-    def __Draw(self):
+    def _Draw(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет рисование. Будьте осторожны.")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
         x = 0.583   # временная заглушка
         y = -0.161  # временная заглушка
         z = 0.33    # временная заглушка
-        clean_contours = self.__FindContours()
+        clean_contours = self._FindContours()
         Draw(ip, speed, x, y, z, clean_contours)
         QMessageBox.about(self, " ", "Рисование окончено. Можете забрать рисунок.")
 
-    def __Stop(self):
+    def _Stop(self):
         ip = self.textBoxIP.text()
         Stop(ip)
         QMessageBox.about(self, " ", "Робот остановлен. Чтобы начать рисование, "
                                      "роботу необходимо вернуться в начальную позицию.")
 
-    def __Hatch(self):
+    def _Hatch(self):
         pass
