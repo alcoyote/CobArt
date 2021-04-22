@@ -17,6 +17,7 @@ def Draw(ip, speed, x, y, z, clean_contours):
 
     x_list = []  # тест
     y_list = []  # тест
+    point_list = []  # тест
 
     for i in range(1, len(clean_contours)):
         robot.run_positions([Position(Point(x + (clean_contours[i][0][0][0] * 0.0002),
@@ -24,7 +25,7 @@ def Draw(ip, speed, x, y, z, clean_contours):
                                             z),
                                       Rotation(3.1415, 0, 0))], speed, MT_JOINT)  # в начало контура, не опускаемся
 
-        # --- ПЕРВЫЙ ВАРИАНТ РИСОВАНИЯ, ПОДАЧА РОБОТУ ПО ОДНОЙ ТОЧКЕ --- #
+        # # # --- ПЕРВЫЙ ВАРИАНТ РИСОВАНИЯ, ПОДАЧА РОБОТУ ПО ОДНОЙ ТОЧКЕ --- # # #
         # for j in range(len(clean_contours[i])):
         #     if j % 2 == 0:
         #         robot.run_positions([Position(Point(x + (clean_contours[i][j][0][0] * 0.0002),
@@ -32,17 +33,27 @@ def Draw(ip, speed, x, y, z, clean_contours):
         #                                             z - 0.105),
         #                                       Rotation(3.1415, 0, 0))], speed, MT_JOINT)
 
-        # --- ТЕСТОВЫЙ ВАРИАНТ РИСОВАНИЯ, ПОДАЧА РОБОТУ ЦЕЛЫХ МАССИВОВ ТОЧЕК --- #
+        # # # --- ТЕСТОВЫЙ ВАРИАНТ РИСОВАНИЯ №1, ПОДАЧА РОБОТУ ЦЕЛЫХ МАССИВОВ ТОЧЕК --- # # #
+        # for j in range(len(clean_contours[i])):
+        #     x_list.append(x + (clean_contours[i][j][0][0] * 0.0002))
+        #     y_list.append(y + (clean_contours[i][j][0][1] * 0.0002))
+        # robot.run_positions([Position(Point(x_list,  # [list[Position]]
+        #                                     y_list,
+        #                                     z - 0.105),
+        #                               Rotation(3.1415, 0, 0))], speed, MT_JOINT)
+        # x_list.clear()
+        # y_list.clear()
+
+        # # # --- ТЕСТОВЫЙ ВАРИАНТ РИСОВАНИЯ №2, ПОДАЧА РОБОТУ ЦЕЛЫХ МАССИВОВ ТОЧЕК --- # # #
         for j in range(len(clean_contours[i])):
-            x_list.append(x + (clean_contours[i][j][0][0] * 0.0002))
-            y_list.append(y + (clean_contours[i][j][0][1] * 0.0002))
-        robot.run_positions([Position(Point(x_list,
-                                            y_list,
-                                            z - 0.105),
-                                      Rotation(3.1415, 0, 0))], speed, MT_JOINT)
-        x_list.clear()
-        y_list.clear()
-        # ------------------------------------------------------------------- -- #
+            point_list.append([Position(Point(x + (clean_contours[i][j][0][0] * 0.0002),
+                                              y + (clean_contours[i][j][0][1] * 0.0002),
+                                              z - 0.105),
+                                        Rotation(3.1415, 0, 0))])
+        robot.run_positions(point_list, speed, MT_JOINT)
+        print(len(point_list))
+        point_list.clear()
+        # # # --------------------------------------------------------------------- # # #
 
         robot.run_positions([Position(Point(x + (clean_contours[i][0][0][0] * 0.0002),
                                             y + (clean_contours[i][0][0][1] * 0.0002),

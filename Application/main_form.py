@@ -5,6 +5,7 @@ import re
 import io
 import contextlib
 import os
+import math
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QListWidgetItem
@@ -48,6 +49,10 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self._SetComboboxItems(category=self.comboBoxCategory.currentText())
         self.comboBoxCategory.currentTextChanged.connect(self._ComboboxCategoryChanged)
         self.comboBoxType.currentTextChanged.connect(self._ComboboxTypeChanged)
+
+        self.approx_list = ["Simple", "TC89_KCOS", "TC89_L1"]
+        self.comboBoxApprox.addItems(self.approx_list)
+        self.comboBoxApprox.currentTextChanged.connect(self._FindContours)
 
         # SpinBoxes
         self.spinBoxThreshold.valueChanged.connect(self._FindContours)
@@ -351,6 +356,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_process.kernel.MyVariant(self.image_process.image,
                                                     self.image_process.temp_images[index]['matrix'])
 
+    # !-!-!-!-!
     def _DefineImageOrientation(self):
         height, width = self.image_process.original_image.shape[:2]
         if height >= width:
@@ -359,19 +365,19 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             orientation = False  # горизонтальная ориентация
         return orientation
 
-    def _ResizeImage(self):  # незаконченная ф-я. Вызывать (после загрузки изображения или) перед выделением контуров?
+    # !-!-!-!-!
+    def _ResizeImage(self):  # поменять название на что-то больее подходящее
         height, width = self.image_process.original_image.shape[:2]
-        orientation = self._DefineImageOrientation()
-        if orientation:
-            if height > 800 or width > 525:  # цифры 800 и 525 в дальнейшем, возможно, поменяются
-                pass
-            else:
-                return
-        elif not orientation:
-            if height > 525 or width > 800:
-                pass
-            else:
-                return
+        ref_height = 800
+        ref_width = 525
+        ref_diagonal = math.sqrt(ref_height*ref_height + ref_width*ref_width)
+        diagonal = math.sqrt(height*height + width*width)
+        if diagonal > ref_diagonal:
+            scale_percent = ref_diagonal / diagonal
+            return scale_percent
+        else:
+            scale_percent = 1
+            return scale_percent
 
     # ROBOT EVENTS AND FUNCTIONAL
     def _FindContours(self):
@@ -381,14 +387,27 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self.image_process.image = cv2.imread(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
         thresh = self.spinBoxThreshold.value()
         area = self.spinBoxArea.value()
-        contours = FindContours(self.image_process.image, thresh, area)[0]
-        clean_contours = FindContours(self.image_process.image, thresh, area)[1]
-        self.image_process.image = FindContours(self.image_process.image, thresh, area)[2]
+        approx_type = self.comboBoxApprox.currentText()
+        if approx_type == "Simple":
+            approx_type = cv2.CHAIN_APPROX_SIMPLE
+        elif approx_type == "TC89_KCOS":
+            approx_type = cv2.CHAIN_APPROX_TC89_KCOS
+        elif approx_type == "TC89_L1":
+            approx_type = cv2.CHAIN_APPROX_TC89_L1
+        contours = FindContours(self.image_process.image, thresh, area, approx_type)[0]
+        clean_contours = FindContours(self.image_process.image, thresh, area, approx_type)[1]
+        self.image_process.image = FindContours(self.image_process.image, thresh, area, approx_type)[2]
         self.textBoxTotal.setText(str(len(contours)))
         self.textBoxClean.setText(str(len(clean_contours)))
         cv2.imwrite('Data/Temp/Contours.jpg', self.image_process.image)
         self._SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
         return clean_contours
+        # Домножаем координаты на вычисленный scale_percent, вызывая функцию _ResizeImage.
+        # Но не так просто здесь, надо подумать, где и когда это лучше сделать (в _Draw?).
+        # Или здесь scale_percent = 1,
+        # а в _Draw в дополнительном цикле в зависимости от размеров скалировать clean_contours
+
+        # создать доп функцию Scaling, отвечающую за поворот изображения и изменение его размера?
 
     def _FindInitPosition(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет поиск листа. Будьте осторожны.")
@@ -399,6 +418,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         z = 0.33    # временная заглушка
         FindInitPosition(ip, speed, x, y, z)
         QMessageBox.about(self, " ", "Робот в начальной позиции и готов к рисованию.")
+        # Определеяем ориентацию листа и сравниваем с ориентацией изображения (вызов _DefineImageOrientation)
+        # Если не совпадают, то
 
     def _Draw(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет рисование. Будьте осторожны.")

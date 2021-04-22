@@ -1,10 +1,10 @@
 import cv2
 
 
-def FindContours(image, thresh, area):
+def FindContours(image, thresh, area, approx_type):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     ret, thresh_image = cv2.threshold(gray_image, thresh, 255, 0)
-    contours, hierarchy = cv2.findContours(thresh_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(thresh_image, cv2.RETR_TREE, approx_type)
     contours_image = cv2.drawContours(image, contours, -1, (0, 0, 255), 2)
     clean_contours = []
     for i in range(len(contours)):
@@ -12,10 +12,4 @@ def FindContours(image, thresh, area):
             clean_contours.append(contours[i])
     clean_contours = sorted(clean_contours, key=cv2.contourArea, reverse=True)  # а может эта сортировка и не нужна?
     clean_contours_image = cv2.drawContours(contours_image, clean_contours, -1, (0, 255, 0), 2)
-
-    # условие: checkbox аппроксимации нажат
-    # for i in range(len(clean_contours)):
-    #     approx = cv2.approxPolyDP(clean_contours[i], 0.01 * cv2.arcLength(clean_contours[i], True), True)
-    #     clean_contours_image = cv2.drawContours(contours_image, [approx], 0, (255, 0, 0), 2)
-
     return contours, clean_contours, clean_contours_image

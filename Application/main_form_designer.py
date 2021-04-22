@@ -356,7 +356,7 @@ class Ui_MainWindow(object):
         self.pictureBoxOutput2.setWordWrap(False)
         self.pictureBoxOutput2.setObjectName("pictureBoxOutput2")
         self.groupBoxContours = QtWidgets.QGroupBox(self.tabRobotInteraction)
-        self.groupBoxContours.setGeometry(QtCore.QRect(940, 200, 320, 231))
+        self.groupBoxContours.setGeometry(QtCore.QRect(940, 200, 320, 201))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(10)
@@ -372,17 +372,17 @@ class Ui_MainWindow(object):
         self.labelContours1.setObjectName("labelContours1")
         self.textBoxTotal = QtWidgets.QLineEdit(self.groupBoxContours)
         self.textBoxTotal.setEnabled(False)
-        self.textBoxTotal.setGeometry(QtCore.QRect(10, 140, 61, 22))
+        self.textBoxTotal.setGeometry(QtCore.QRect(10, 110, 61, 22))
         self.textBoxTotal.setObjectName("textBoxTotal")
         self.textBoxClean = QtWidgets.QLineEdit(self.groupBoxContours)
         self.textBoxClean.setEnabled(False)
-        self.textBoxClean.setGeometry(QtCore.QRect(10, 170, 61, 22))
+        self.textBoxClean.setGeometry(QtCore.QRect(10, 140, 61, 22))
         self.textBoxClean.setObjectName("textBoxClean")
         self.labelContours3 = QtWidgets.QLabel(self.groupBoxContours)
-        self.labelContours3.setGeometry(QtCore.QRect(80, 140, 231, 16))
+        self.labelContours3.setGeometry(QtCore.QRect(80, 110, 231, 16))
         self.labelContours3.setObjectName("labelContours3")
         self.labelContours4 = QtWidgets.QLabel(self.groupBoxContours)
-        self.labelContours4.setGeometry(QtCore.QRect(80, 170, 231, 16))
+        self.labelContours4.setGeometry(QtCore.QRect(80, 140, 231, 16))
         self.labelContours4.setObjectName("labelContours4")
         self.spinBoxArea = QtWidgets.QSpinBox(self.groupBoxContours)
         self.spinBoxArea.setEnabled(True)
@@ -392,15 +392,47 @@ class Ui_MainWindow(object):
         self.labelContours2 = QtWidgets.QLabel(self.groupBoxContours)
         self.labelContours2.setGeometry(QtCore.QRect(80, 50, 231, 16))
         self.labelContours2.setObjectName("labelContours2")
-        self.checkBox_internal = QtWidgets.QCheckBox(self.groupBoxContours)
-        self.checkBox_internal.setGeometry(QtCore.QRect(10, 80, 301, 20))
-        self.checkBox_internal.setObjectName("checkBox_internal")
-        self.checkBox_external = QtWidgets.QCheckBox(self.groupBoxContours)
-        self.checkBox_external.setGeometry(QtCore.QRect(10, 110, 301, 20))
-        self.checkBox_external.setObjectName("checkBox_external")
         self.checkBox_hatching = QtWidgets.QCheckBox(self.groupBoxContours)
-        self.checkBox_hatching.setGeometry(QtCore.QRect(10, 200, 301, 20))
+        self.checkBox_hatching.setGeometry(QtCore.QRect(10, 170, 301, 20))
         self.checkBox_hatching.setObjectName("checkBox_hatching")
+        self.comboBoxApprox = QtWidgets.QComboBox(self.groupBoxContours)
+        self.comboBoxApprox.setGeometry(QtCore.QRect(10, 80, 151, 22))
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift SemiLight")
+        self.comboBoxApprox.setFont(font)
+        self.comboBoxApprox.setStyleSheet("QComboBox {\n"
+"    border: 1px solid black;\n"
+"    border-radius: 10px;\n"
+"    padding: 1px 18px 1px 3px;\n"
+"    min-width: 6em;\n"
+"}\n"
+"\n"
+"QComboBox:editable {\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 20px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color:white;\n"
+"    border-left-style: solid; /* just a single line */\n"
+"    border-top-right-radius: 10px; /* same radius as the QComboBox */\n"
+"    border-bottom-right-radius: 10px;\n"
+"}\n"
+"QComboBox::down-arrow {\n"
+"    image: url(D:/Work/Diploma Project/Application/Alternative Cobot/Resource/arrow1.png);\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:on { /* shift the arrow when popup is open */\n"
+"    top: 1px;\n"
+"    left: 1px;\n"
+"}")
+        self.comboBoxApprox.setObjectName("comboBoxApprox")
+        self.labelContours3_2 = QtWidgets.QLabel(self.groupBoxContours)
+        self.labelContours3_2.setGeometry(QtCore.QRect(170, 80, 141, 16))
+        self.labelContours3_2.setObjectName("labelContours3_2")
         self.groupBoxProcessed = QtWidgets.QGroupBox(self.tabRobotInteraction)
         self.groupBoxProcessed.setGeometry(QtCore.QRect(940, 0, 320, 200))
         font = QtGui.QFont()
@@ -419,7 +451,7 @@ class Ui_MainWindow(object):
         self.pictureBoxProcessed.setWordWrap(False)
         self.pictureBoxProcessed.setObjectName("pictureBoxProcessed")
         self.groupBoxRobot = QtWidgets.QGroupBox(self.tabRobotInteraction)
-        self.groupBoxRobot.setGeometry(QtCore.QRect(940, 430, 321, 81))
+        self.groupBoxRobot.setGeometry(QtCore.QRect(940, 400, 321, 81))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(10)
@@ -442,7 +474,7 @@ class Ui_MainWindow(object):
         self.labelRobot2.setObjectName("labelRobot2")
         self.buttonFindInitPosition = QtWidgets.QPushButton(self.tabRobotInteraction)
         self.buttonFindInitPosition.setEnabled(True)
-        self.buttonFindInitPosition.setGeometry(QtCore.QRect(1040, 520, 120, 30))
+        self.buttonFindInitPosition.setGeometry(QtCore.QRect(1040, 490, 120, 30))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(10)
@@ -463,7 +495,7 @@ class Ui_MainWindow(object):
         self.buttonFindInitPosition.setObjectName("buttonFindInitPosition")
         self.buttonDraw = QtWidgets.QPushButton(self.tabRobotInteraction)
         self.buttonDraw.setEnabled(True)
-        self.buttonDraw.setGeometry(QtCore.QRect(1040, 560, 120, 30))
+        self.buttonDraw.setGeometry(QtCore.QRect(1040, 530, 120, 30))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(10)
@@ -484,7 +516,7 @@ class Ui_MainWindow(object):
         self.buttonDraw.setObjectName("buttonDraw")
         self.buttonStop = QtWidgets.QPushButton(self.tabRobotInteraction)
         self.buttonStop.setEnabled(True)
-        self.buttonStop.setGeometry(QtCore.QRect(1040, 600, 120, 30))
+        self.buttonStop.setGeometry(QtCore.QRect(1040, 570, 120, 30))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(10)
@@ -533,9 +565,8 @@ class Ui_MainWindow(object):
         self.labelContours3.setText(_translate("MainWindow", "Total number of contours "))
         self.labelContours4.setText(_translate("MainWindow", "Number of \"clean\" contours "))
         self.labelContours2.setText(_translate("MainWindow", "Screening area"))
-        self.checkBox_internal.setText(_translate("MainWindow", "Remove external contours"))
-        self.checkBox_external.setText(_translate("MainWindow", "Remove internal contours"))
         self.checkBox_hatching.setText(_translate("MainWindow", "Hatch"))
+        self.labelContours3_2.setText(_translate("MainWindow", "Approximation type"))
         self.groupBoxProcessed.setTitle(_translate("MainWindow", "Processed Image"))
         self.groupBoxRobot.setTitle(_translate("MainWindow", "Robot parameters"))
         self.textBoxIP.setText(_translate("MainWindow", "10.10.10.20:8081"))
