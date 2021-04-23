@@ -356,7 +356,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_process.kernel.MyVariant(self.image_process.image,
                                                     self.image_process.temp_images[index]['matrix'])
 
-    # !-!-!-!-!
     def _DefineImageOrientation(self):
         height, width = self.image_process.original_image.shape[:2]
         if height >= width:
@@ -365,8 +364,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             orientation = False  # горизонтальная ориентация
         return orientation
 
-    # !-!-!-!-!
-    def _ResizeImage(self):  # поменять название на что-то больее подходящее
+    def _ScalePercent(self):
         height, width = self.image_process.original_image.shape[:2]
         ref_height = 800
         ref_width = 525
@@ -401,13 +399,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.textBoxClean.setText(str(len(clean_contours)))
         cv2.imwrite('Data/Temp/Contours.jpg', self.image_process.image)
         self._SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
+        print(clean_contours)
         return clean_contours
-        # Домножаем координаты на вычисленный scale_percent, вызывая функцию _ResizeImage.
-        # Но не так просто здесь, надо подумать, где и когда это лучше сделать (в _Draw?).
-        # Или здесь scale_percent = 1,
-        # а в _Draw в дополнительном цикле в зависимости от размеров скалировать clean_contours
-
-        # создать доп функцию Scaling, отвечающую за поворот изображения и изменение его размера?
 
     def _FindInitPosition(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет поиск листа. Будьте осторожны.")
@@ -418,8 +411,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         z = 0.33    # временная заглушка
         FindInitPosition(ip, speed, x, y, z)
         QMessageBox.about(self, " ", "Робот в начальной позиции и готов к рисованию.")
-        # Определеяем ориентацию листа и сравниваем с ориентацией изображения (вызов _DefineImageOrientation)
-        # Если не совпадают, то
 
     def _Draw(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет рисование. Будьте осторожны.")
@@ -429,7 +420,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         y = -0.161  # временная заглушка
         z = 0.33    # временная заглушка
         clean_contours = self._FindContours()
-        Draw(ip, speed, x, y, z, clean_contours)
+        scale_percent = self._ScalePercent()
+        Draw(ip, speed, x, y, z, clean_contours, scale_percent)
         QMessageBox.about(self, " ", "Рисование окончено. Можете забрать рисунок.")
 
     def _Stop(self):
