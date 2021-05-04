@@ -51,7 +51,7 @@ def Draw(ip, speed, x, y, z, clean_contours, scale_percent):
                                               z - 0.105),
                                         Rotation(3.1415, 0, 0))])
         robot.run_positions(point_list, speed, MT_JOINT)
-        print(len(point_list))
+        # print(len(point_list))
         point_list.clear()
         # # # --------------------------------------------------------------------- # # #
 

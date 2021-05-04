@@ -124,7 +124,7 @@
       }
     }
   },
-  "Morphology": {
+  "Morphological Transformations": {
     "Open": {
       "spinBox1": {
         "name": "kernel size",

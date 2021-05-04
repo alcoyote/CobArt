@@ -28,6 +28,12 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.image_process = ImageProcess()
         self.method_parameters = self._GetConfiguration()
 
+        # Init Access to Control Elements
+        self.tabWidget.setTabEnabled(1, False)
+        self.buttonSaveImage.setEnabled(False)
+        self.groupBoxHistory.setEnabled(False)
+        self.groupBoxCommands.setEnabled(False)
+
         # Buttons
         self.buttonLoadImage.clicked.connect(self._ButtonLoadImageClicked)
         self.buttonPhoto.clicked.connect(self._ButtonPhotoClicked)
@@ -40,11 +46,11 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonStop.clicked.connect(self._Stop)
 
         # ComboBoxes
-        self.command_list = {'Blur': ["Average", "Bilateral", "Gaussian", "Median"],
+        self.command_list = {'Blur': ["Average", "Gaussian", "Median", "Bilateral"],
                              'Kernel': ["Sharpen", "My Variant"],
                              'Edge Detection': ["Canny", "Laplacian", "Sobel X", "Sobel Y", "Sobel", "Scharr X",
                                                 "Scharr Y", "Simple Thresholding", "Adaptive Thresholding"],
-                             'Morphology': ["Dilate", "Erode", "Close", "Open", "Gradient"]}
+                             'Morphological Transformations': ["Dilate", "Erode", "Close", "Open", "Gradient"]}
         self.comboBoxCategory.addItems(self.command_list.keys())
         self._SetComboboxItems(category=self.comboBoxCategory.currentText())
         self.comboBoxCategory.currentTextChanged.connect(self._ComboboxCategoryChanged)
@@ -57,7 +63,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         # SpinBoxes
         self.spinBoxThreshold.valueChanged.connect(self._FindContours)
         self.spinBoxArea.valueChanged.connect(self._FindContours)
-        self.comboBoxType.activated[str].connect(self._SetAccessKernelSpinBoxes)
+        self.comboBoxType.activated[str].connect(self._SetAccessToKernelSpinBoxes)
         self._HideAllSpinBoxes()
         self._SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()]
                             [self.comboBoxType.currentText()])
@@ -74,6 +80,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self._SetImagePictureBoxOutput('Data/Temp/Original.jpg')
             self._SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
             self.listBoxImages.clear()
+            self._SetAccessToControlElements()
         else:
             return
 
@@ -90,6 +97,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self._SetImagePictureBoxOriginal('Data/Temp/Original.jpg')
                 self._SetImagePictureBoxOutput('Data/Temp/Original.jpg')
                 self._SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
+                self._SetAccessToControlElements()
+                break
+            elif cv2.getWindowProperty('Press "q" to take a photo', cv2.WND_PROP_VISIBLE) < 1:
                 break
         camera.release()
         cv2.destroyAllWindows()
@@ -175,6 +185,12 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         item.setToolTip(text)
         self.listBoxImages.addItem(item)
 
+    def _SetAccessToControlElements(self):
+        self.tabWidget.setTabEnabled(1, True)
+        self.buttonSaveImage.setEnabled(True)
+        self.groupBoxHistory.setEnabled(True)
+        self.groupBoxCommands.setEnabled(True)
+
     def _SetImagePictureBoxOriginal(self, image_path):
         # Picture Box Original
         self.pixmap = QPixmap(QImage(image_path))
@@ -245,7 +261,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             exec(f'self.{key}.setValue({values["value"]})')
             exec(f'self.{key}.show()')
 
-    def _SetAccessKernelSpinBoxes(self):
+    def _SetAccessToKernelSpinBoxes(self):
         if self.comboBoxType.currentText() == "Sharpen":
             for i in range(1, 10):
                 exec(f'self.spinBoxKernel{i}.setEnabled(False)')
@@ -258,7 +274,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self._ApplyBlurMethod(name, index)
         elif category == "Edge Detection":
             self._ApplyEdgeDetectionMethod(name, index)
-        elif category == "Morphology":
+        elif category == "Morphological Transformations":
             self._ApplyMorphologyMethod(name, index)
         elif category == "Kernel":
             self._ApplyKernelMethod(name, index)
@@ -399,7 +415,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.textBoxClean.setText(str(len(clean_contours)))
         cv2.imwrite('Data/Temp/Contours.jpg', self.image_process.image)
         self._SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
-        print(clean_contours)
         return clean_contours
 
     def _FindInitPosition(self):
@@ -423,6 +438,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         scale_percent = self._ScalePercent()
         Draw(ip, speed, x, y, z, clean_contours, scale_percent)
         QMessageBox.about(self, " ", "Рисование окончено. Можете забрать рисунок.")
+        # сравниваем ориентации изображения и листа
+        # если совпадают, то clean_contours остаются собой
+        # если не совпадают, то переворачиваем изобрадение и вызываем FindContours()[1], чего пользователь не видит
 
     def _Stop(self):
         ip = self.textBoxIP.text()
