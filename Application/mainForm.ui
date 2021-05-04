@@ -628,6 +628,9 @@ border-color: black;
        </property>
       </widget>
       <widget class="QLabel" name="label1">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>80</x>

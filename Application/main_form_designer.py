@@ -265,6 +265,7 @@ class Ui_MainWindow(object):
         self.buttonApply.setFlat(False)
         self.buttonApply.setObjectName("buttonApply")
         self.label1 = QtWidgets.QLabel(self.groupBoxCommands)
+        self.label1.setEnabled(True)
         self.label1.setGeometry(QtCore.QRect(80, 80, 171, 16))
         self.label1.setObjectName("label1")
         self.label2 = QtWidgets.QLabel(self.groupBoxCommands)
