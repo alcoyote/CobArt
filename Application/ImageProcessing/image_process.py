@@ -1,7 +1,7 @@
 from ImageProcessing.blur import Blur
 from ImageProcessing.edge_detection import EdgeDetection
 from ImageProcessing.morphology import Morphology
-from ImageProcessing.kernel import Kernel
+from ImageProcessing.sharpening_with_kernel import SharpeningWithKernel
 
 
 class ImageProcess:
@@ -10,6 +10,6 @@ class ImageProcess:
         self.original_image = None
         self.temp_images = []
         self.blur = Blur()
-        self.kernel = Kernel()
+        self.kernel = SharpeningWithKernel()
         self.edge_detection = EdgeDetection()
         self.morphology = Morphology()

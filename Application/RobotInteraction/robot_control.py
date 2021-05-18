@@ -1,6 +1,5 @@
 from pulserest.robot import Position
 from pulserest import *
-import cv2
 import time
 
 
@@ -69,10 +68,6 @@ def Draw(ip, speed, x, y, z, clean_contours, scale_percent):
     robot.await_motion()
     time_finish = time.time()
     print("Time: " + time_finish - time_start)
-
-
-def Hatch(ip, speed, clean_contours):
-    pass
 
 
 def Stop(ip):

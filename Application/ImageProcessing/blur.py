@@ -13,6 +13,3 @@ class Blur:
 
     def Bilateral(self, image, fsize, sigmaColor, sigmaSpace):
         return cv2.bilateralFilter(image, d=fsize, sigmaColor=sigmaColor, sigmaSpace=sigmaSpace)
-
-    #def Sharp(self, image, kernel):
-       # return cv2.filter2D(image, cv2.CV_64F, kernel)

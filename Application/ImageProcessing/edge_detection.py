@@ -7,15 +7,15 @@ class EdgeDetection:
 
     def Laplacian(self, image):
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        return cv2.Laplacian(image, cv2.CV_64F)
+        return cv2.Laplacian(image, -1)
 
     def SobelX(self, image, ksize):
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        return cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=ksize)
+        return cv2.Sobel(image, -1, 1, 0, ksize=ksize)
 
     def SobelY(self, image, ksize):
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        return cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=ksize)
+        return cv2.Sobel(image, -1, 0, 1, ksize=ksize)
 
     def Sobel(self, image, ksize):
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -27,14 +27,14 @@ class EdgeDetection:
 
     def ScharrX(self, image):
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        return cv2.Scharr(image, cv2.CV_64F, 1, 0)
+        return cv2.Scharr(image, -1, 1, 0)
 
     def ScharrY(self, image):
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        return cv2.Scharr(image, cv2.CV_64F, 0, 1)
+        return cv2.Scharr(image, -1, 0, 1)
 
     def SimpleThresholding(self, image, thresh):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         ret, thresh = cv2.threshold(image, thresh, 255, cv2.THRESH_BINARY)
         return thresh
 

@@ -15,7 +15,7 @@ from PyQt5.QtCore import Qt
 from main_form_designer import Ui_MainWindow
 from ImageProcessing.image_process import ImageProcess
 from RobotInteraction.contours import FindContours
-from RobotInteraction.robot_control import FindInitPosition, Draw, Hatch, Stop
+from RobotInteraction.robot_control import FindInitPosition, Draw, Stop
 
 
 class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -41,15 +41,15 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonApply.clicked.connect(self._ButtonApplyClicked)
         self.buttonRemove.clicked.connect(self._ButtonRemoveClicked)
         self.buttonClear.clicked.connect(self._ButtonClearClicked)
-        self.buttonFindInitPosition.clicked.connect(self._FindInitPosition)
+        self.buttonInitPosition.clicked.connect(self._FindInitPosition)
         self.buttonDraw.clicked.connect(self._Draw)
         self.buttonStop.clicked.connect(self._Stop)
 
         # ComboBoxes
         self.command_list = {'Blur': ["Average", "Gaussian", "Median", "Bilateral"],
-                             'Kernel': ["Sharpen", "My Variant"],
-                             'Edge Detection': ["Canny", "Laplacian", "Sobel X", "Sobel Y", "Sobel", "Scharr X",
-                                                "Scharr Y", "Simple Thresholding", "Adaptive Thresholding"],
+                             'Sharpening with Kernel': ["Sharpen", "Your variant"],
+                             'Edge Detection': ["Simple Thresholding", "Adaptive Thresholding", "Canny", "Laplacian",
+                                                "Sobel X", "Sobel Y", "Sobel", "Scharr X", "Scharr Y"],
                              'Morphological Transformations': ["Dilate", "Erode", "Close", "Open", "Gradient"]}
         self.comboBoxCategory.addItems(self.command_list.keys())
         self._SetComboboxItems(category=self.comboBoxCategory.currentText())
@@ -226,7 +226,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                     exec(f'print(self.{key}.value())')
                 text.append(f"{parameters[key]['name']}: {stream.getvalue()}")
                 method[parameters[key]['name']] = int(stream.getvalue())
-        if category == "Kernel":
+        if category == "Sharpening with Kernel":
             text.append(f"matrix:\n {self._GetKernel()}")
             method['matrix'] = self._GetKernel()
         text = "; ".join(text)
@@ -265,7 +265,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.comboBoxType.currentText() == "Sharpen":
             for i in range(1, 10):
                 exec(f'self.spinBoxKernel{i}.setEnabled(False)')
-        elif self.comboBoxType.currentText() == "My Variant":
+        elif self.comboBoxType.currentText() == "Your variant":
             for i in range(1, 10):
                 exec(f'self.spinBoxKernel{i}.setEnabled(True)')
 
@@ -276,7 +276,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self._ApplyEdgeDetectionMethod(name, index)
         elif category == "Morphological Transformations":
             self._ApplyMorphologyMethod(name, index)
-        elif category == "Kernel":
+        elif category == "Sharpening with Kernel":
             self._ApplyKernelMethod(name, index)
 
     def _ApplyBlurMethod(self, name, index):
@@ -367,10 +367,10 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self.image_process.image = \
                 self.image_process.kernel.Sharpen(self.image_process.image,
                                                   self.image_process.temp_images[index]['matrix'])
-        elif name == "My Variant":
+        elif name == "Your variant":
             self.image_process.image = \
-                self.image_process.kernel.MyVariant(self.image_process.image,
-                                                    self.image_process.temp_images[index]['matrix'])
+                self.image_process.kernel.YourVariant(self.image_process.image,
+                                                      self.image_process.temp_images[index]['matrix'])
 
     def _DefineImageOrientation(self):
         height, width = self.image_process.original_image.shape[:2]
@@ -447,6 +447,3 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         Stop(ip)
         QMessageBox.about(self, " ", "Робот остановлен. Чтобы начать рисование, "
                                      "роботу необходимо вернуться в начальную позицию.")
-
-    def _Hatch(self):
-        pass

@@ -22,5 +22,3 @@ class Morphology:
     def Open(self, image, ksize):
         kernel = np.ones((ksize, ksize), np.uint8)
         return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
-
-# все работает наоборот
