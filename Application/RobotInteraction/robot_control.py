@@ -3,7 +3,7 @@ from pulserest import *
 import time
 
 
-def FindInitPosition(ip, speed, x, y, z):  # переделать под поиск листика
+def MoveToInitPosition(ip, speed, x, y, z):  # переделать под поиск листика
     robot = RobotPulse(ip)
     init_position = Position(Point(x, y, z), Rotation(3.1415, 0, 0))
     robot.set_position(init_position, speed)

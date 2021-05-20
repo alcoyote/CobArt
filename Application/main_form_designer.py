@@ -8,6 +8,7 @@ class Ui_MainWindow(object):
         MainWindow.setEnabled(True)
         MainWindow.resize(1280, 720)
         MainWindow.setMinimumSize(QtCore.QSize(1280, 720))
+        MainWindow.setMaximumSize(QtCore.QSize(1280, 720))
         MainWindow.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         MainWindow.setWindowOpacity(1.0)
         MainWindow.setStyleSheet("/*\n"
@@ -1917,3 +1918,4 @@ class Ui_MainWindow(object):
         self.buttonDraw.setText(_translate("MainWindow", "Draw"))
         self.buttonStop.setText(_translate("MainWindow", "STOP!"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabRobotInteraction), _translate("MainWindow", "Robot Interaction"))
+import style_rc

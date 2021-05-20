@@ -178,7 +178,7 @@
       },
       "spinBox2": {
         "name": "iterations",
-        "value": 3,
+        "value": 1,
         "step": 1,
         "min": 1,
         "max": 10

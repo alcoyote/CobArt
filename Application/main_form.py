@@ -15,13 +15,14 @@ from PyQt5.QtCore import Qt
 from main_form_designer import Ui_MainWindow
 from ImageProcessing.image_process import ImageProcess
 from RobotInteraction.contours import FindContours
-from RobotInteraction.robot_control import FindInitPosition, Draw, Stop
+from RobotInteraction.robot_control import MoveToInitPosition, Draw, Stop
 
 
 class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowIcon(QIcon('Data/Resource/byAlex.ico'))
+        self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint | Qt.WindowTitleHint)
         self.setupUi(self)
 
         # Objects and Data
@@ -31,6 +32,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         # Init Access to Control Elements
         self.tabWidget.setTabEnabled(1, False)
         self.buttonSaveImage.setEnabled(False)
+        self.groupBoxOriginal.setEnabled(False)
         self.groupBoxHistory.setEnabled(False)
         self.groupBoxCommands.setEnabled(False)
 
@@ -41,7 +43,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonApply.clicked.connect(self._ButtonApplyClicked)
         self.buttonRemove.clicked.connect(self._ButtonRemoveClicked)
         self.buttonClear.clicked.connect(self._ButtonClearClicked)
-        self.buttonInitPosition.clicked.connect(self._FindInitPosition)
+        self.buttonInitPosition.clicked.connect(self._MoveToInitPosition)
         self.buttonDraw.clicked.connect(self._Draw)
         self.buttonStop.clicked.connect(self._Stop)
 
@@ -55,6 +57,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self._SetComboboxItems(category=self.comboBoxCategory.currentText())
         self.comboBoxCategory.currentTextChanged.connect(self._ComboboxCategoryChanged)
         self.comboBoxType.currentTextChanged.connect(self._ComboboxTypeChanged)
+        self.comboBoxType.activated[str].connect(self._SetAccessToKernelSpinBoxes)
 
         self.approx_list = ["Simple", "TC89_KCOS", "TC89_L1"]
         self.comboBoxApprox.addItems(self.approx_list)
@@ -63,10 +66,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         # SpinBoxes
         self.spinBoxThreshold.valueChanged.connect(self._FindContours)
         self.spinBoxArea.valueChanged.connect(self._FindContours)
-        self.comboBoxType.activated[str].connect(self._SetAccessToKernelSpinBoxes)
         self._HideAllSpinBoxes()
-        self._SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()]
-                            [self.comboBoxType.currentText()])
+        self._SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()][self.comboBoxType.currentText()])
 
     # IMAGE PROCESSING EVENTS
     def _ButtonLoadImageClicked(self):
@@ -81,8 +82,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self._SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
             self.listBoxImages.clear()
             self._SetAccessToControlElements()
-        else:
-            return
 
     def _ButtonPhotoClicked(self):
         camera = cv2.VideoCapture(0)
@@ -110,15 +109,13 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.image_path = self.image_path[0]
         if len(self.image_path) > 0:
             cv2.imwrite(self.image_path, self.image_process.image)
-        else:
-            return
 
     def _ButtonApplyClicked(self):
         category = self.comboBoxCategory.currentText()
         name = self.comboBoxType.currentText()
         text, method = self._GetMethodInfo(self.comboBoxCategory.currentText(), self.comboBoxType.currentText(),
                                            self.method_parameters[self.comboBoxCategory.currentText()]
-                                            [self.comboBoxType.currentText()])
+                                           [self.comboBoxType.currentText()])
         self.image_process.temp_images.append(method)
         self._ApplyMethod(category, name, len(self.image_process.temp_images) - 1)
         cv2.imwrite(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg', self.image_process.image)
@@ -128,20 +125,21 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def _ButtonRemoveClicked(self):
         index = self.listBoxImages.currentRow()
-        self.image_process.temp_images.pop(index)
-        self.image_process.image = self.image_process.original_image
-        self.listBoxImages.takeItem(index)
-        for index in range(len(self.image_process.temp_images)):
-            self._ApplyMethod(self.image_process.temp_images[index]['category'],
-                              self.image_process.temp_images[index]['name'],
-                              index)
-            cv2.imwrite(f'Data/Temp/Temp{index}.jpg', self.image_process.image)
-        if self.image_process.temp_images:
-            self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-            self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-        else:
-            self._SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
-            self._SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
+        if index > -1:
+            self.image_process.temp_images.pop(index)
+            self.image_process.image = self.image_process.original_image
+            self.listBoxImages.takeItem(index)
+            for index in range(len(self.image_process.temp_images)):
+                self._ApplyMethod(self.image_process.temp_images[index]['category'],
+                                  self.image_process.temp_images[index]['name'],
+                                  index)
+                cv2.imwrite(f'Data/Temp/Temp{index}.jpg', self.image_process.image)
+            if self.image_process.temp_images:
+                self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+                self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+            else:
+                self._SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
+                self._SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
 
     def _ButtonClearClicked(self):
         for index in range(len(self.image_process.temp_images)):
@@ -188,6 +186,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
     def _SetAccessToControlElements(self):
         self.tabWidget.setTabEnabled(1, True)
         self.buttonSaveImage.setEnabled(True)
+        self.groupBoxOriginal.setEnabled(True)
         self.groupBoxHistory.setEnabled(True)
         self.groupBoxCommands.setEnabled(True)
 
@@ -229,7 +228,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         if category == "Sharpening with Kernel":
             text.append(f"matrix:\n {self._GetKernel()}")
             method['matrix'] = self._GetKernel()
-        text = "; ".join(text)
+        text = "<br>".join(text)
+        text += f"<br><img src='Data/Temp/Temp{len(self.image_process.temp_images)}.jpg'>"
         return text, method
 
     def _GetConfiguration(self):
@@ -372,27 +372,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_process.kernel.YourVariant(self.image_process.image,
                                                       self.image_process.temp_images[index]['matrix'])
 
-    def _DefineImageOrientation(self):
-        height, width = self.image_process.original_image.shape[:2]
-        if height >= width:
-            orientation = True  # вертикальная ориентация
-        elif height < width:
-            orientation = False  # горизонтальная ориентация
-        return orientation
-
-    def _ScalePercent(self):
-        height, width = self.image_process.original_image.shape[:2]
-        ref_height = 800
-        ref_width = 525
-        ref_diagonal = math.sqrt(ref_height*ref_height + ref_width*ref_width)
-        diagonal = math.sqrt(height*height + width*width)
-        if diagonal > ref_diagonal:
-            scale_percent = ref_diagonal / diagonal
-            return scale_percent
-        else:
-            scale_percent = 1
-            return scale_percent
-
     # ROBOT EVENTS AND FUNCTIONAL
     def _FindContours(self):
         if len(self.image_process.temp_images) == 0:
@@ -417,28 +396,51 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self._SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
         return clean_contours
 
-    def _FindInitPosition(self):
+    def _DefineImageOrientation(self):
+        height, width = self.image_process.original_image.shape[:2]
+        if height >= width:
+            orientation = True  # вертикальная ориентация
+        elif height < width:
+            orientation = False  # горизонтальная ориентация
+        return orientation
+
+    def _GetScalePercent(self):
+        height, width = self.image_process.original_image.shape[:2]
+        ref_height = 800
+        ref_width = 525
+        ref_diagonal = math.sqrt(ref_height*ref_height + ref_width*ref_width)
+        diagonal = math.sqrt(height*height + width*width)
+        if diagonal > ref_diagonal:
+            scale_percent = ref_diagonal / diagonal
+            return scale_percent
+        else:
+            scale_percent = 1
+            return scale_percent
+
+    def _InitCoordinates(self):
+        x = 0.583
+        y = -0.161
+        z = 0.33
+        return x, y, z
+
+    def _MoveToInitPosition(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет поиск листа. Будьте осторожны.")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
-        x = 0.583   # временная заглушка
-        y = -0.161  # временная заглушка
-        z = 0.33    # временная заглушка
-        FindInitPosition(ip, speed, x, y, z)
+        x, y, z = self._InitCoordinates()
+        MoveToInitPosition(ip, speed, x, y, z)
         QMessageBox.about(self, " ", "Робот в начальной позиции и готов к рисованию.")
 
     def _Draw(self):
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет рисование. Будьте осторожны.")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
-        x = 0.583   # временная заглушка
-        y = -0.161  # временная заглушка
-        z = 0.33    # временная заглушка
+        x, y, z = self._InitCoordinates()
         clean_contours = self._FindContours()
-        scale_percent = self._ScalePercent()
+        scale_percent = self._GetScalePercent()
         Draw(ip, speed, x, y, z, clean_contours, scale_percent)
         QMessageBox.about(self, " ", "Рисование окончено. Можете забрать рисунок.")
-        # сравниваем ориентации изображения и листа
+        # сравниваем ориентации изображения и листа (у листа всегда вертикально)
         # если совпадают, то clean_contours остаются собой
         # если не совпадают, то переворачиваем изобрадение и вызываем FindContours()[1], чего пользователь не видит
 
