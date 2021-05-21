@@ -4,7 +4,7 @@ from ImageProcessing.morphology import Morphology
 from ImageProcessing.sharpening_with_kernel import SharpeningWithKernel
 
 
-class ImageProcess:
+class ImageProcessing:
     def __init__(self):
         self.image = None
         self.original_image = None

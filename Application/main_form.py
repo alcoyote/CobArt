@@ -13,9 +13,8 @@ from PyQt5.QtGui import QPixmap, QImage, QIcon
 from PyQt5.QtCore import Qt
 
 from main_form_designer import Ui_MainWindow
-from ImageProcessing.image_process import ImageProcess
-from RobotInteraction.contours import FindContours
-from RobotInteraction.robot_control import MoveToInitPosition, Draw, Stop
+from ImageProcessing.image_processing import ImageProcessing
+from RobotInteraction.robot_interaction import RobotInteraction
 
 
 class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -26,8 +25,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # Objects and Data
-        self.image_process = ImageProcess()
+        self.image_processing = ImageProcessing()
         self.method_parameters = self._GetConfiguration()
+        self.robot_interaction = RobotInteraction()
 
         # Init Access to Control Elements
         self.tabWidget.setTabEnabled(1, False)
@@ -35,6 +35,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.groupBoxOriginal.setEnabled(False)
         self.groupBoxHistory.setEnabled(False)
         self.groupBoxCommands.setEnabled(False)
+        self.buttonDraw.setEnabled(False)
+        self.buttonStop.setEnabled(False)
 
         # Buttons
         self.buttonLoadImage.clicked.connect(self._ButtonLoadImageClicked)
@@ -74,9 +76,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.image_path = QFileDialog.getOpenFileName(filter='Изображения (*.jpg *.jpeg *.png)')
         self.image_path = self.image_path[0]
         if len(self.image_path) > 0:
-            self.image_process.image = cv2.imread(self.image_path)
-            self.image_process.original_image = self.image_process.image
-            cv2.imwrite('Data/Temp/Original.jpg', self.image_process.original_image)
+            self.image_processing.image = cv2.imread(self.image_path)
+            self.image_processing.original_image = self.image_processing.image
+            cv2.imwrite('Data/Temp/Original.jpg', self.image_processing.original_image)
             self._SetImagePictureBoxOriginal('Data/Temp/Original.jpg')
             self._SetImagePictureBoxOutput('Data/Temp/Original.jpg')
             self._SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
@@ -90,9 +92,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             cv2.imshow('Press "q" to take a photo', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.listBoxImages.clear()
-                self.image_process.image = frame
-                self.image_process.original_image = frame
-                cv2.imwrite('Data/Temp/Original.jpg', self.image_process.original_image)
+                self.image_processing.image = frame
+                self.image_processing.original_image = frame
+                cv2.imwrite('Data/Temp/Original.jpg', self.image_processing.original_image)
                 self._SetImagePictureBoxOriginal('Data/Temp/Original.jpg')
                 self._SetImagePictureBoxOutput('Data/Temp/Original.jpg')
                 self._SetImagePictureBoxOutput2('Data/Temp/Original.jpg')
@@ -104,11 +106,11 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         cv2.destroyAllWindows()
 
     def _ButtonSaveImageClicked(self):
-        self.image_process.image = cv2.imread(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+        self.image_processing.image = cv2.imread(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg')
         self.image_path = QFileDialog.getSaveFileName(filter='JPG (*.jpg);; PNG (*.png)')
         self.image_path = self.image_path[0]
         if len(self.image_path) > 0:
-            cv2.imwrite(self.image_path, self.image_process.image)
+            cv2.imwrite(self.image_path, self.image_processing.image)
 
     def _ButtonApplyClicked(self):
         category = self.comboBoxCategory.currentText()
@@ -116,37 +118,37 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         text, method = self._GetMethodInfo(self.comboBoxCategory.currentText(), self.comboBoxType.currentText(),
                                            self.method_parameters[self.comboBoxCategory.currentText()]
                                            [self.comboBoxType.currentText()])
-        self.image_process.temp_images.append(method)
-        self._ApplyMethod(category, name, len(self.image_process.temp_images) - 1)
-        cv2.imwrite(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg', self.image_process.image)
-        self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-        self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-        self._SetListboxItem(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg', text)
+        self.image_processing.temp_images.append(method)
+        self._ApplyMethod(category, name, len(self.image_processing.temp_images) - 1)
+        cv2.imwrite(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg', self.image_processing.image)
+        self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg')
+        self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg')
+        self._SetListboxItem(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg', text)
 
     def _ButtonRemoveClicked(self):
         index = self.listBoxImages.currentRow()
         if index > -1:
-            self.image_process.temp_images.pop(index)
-            self.image_process.image = self.image_process.original_image
+            self.image_processing.temp_images.pop(index)
+            self.image_processing.image = self.image_processing.original_image
             self.listBoxImages.takeItem(index)
-            for index in range(len(self.image_process.temp_images)):
-                self._ApplyMethod(self.image_process.temp_images[index]['category'],
-                                  self.image_process.temp_images[index]['name'],
+            for index in range(len(self.image_processing.temp_images)):
+                self._ApplyMethod(self.image_processing.temp_images[index]['category'],
+                                  self.image_processing.temp_images[index]['name'],
                                   index)
-                cv2.imwrite(f'Data/Temp/Temp{index}.jpg', self.image_process.image)
-            if self.image_process.temp_images:
-                self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
-                self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+                cv2.imwrite(f'Data/Temp/Temp{index}.jpg', self.image_processing.image)
+            if self.image_processing.temp_images:
+                self._SetImagePictureBoxOutput(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg')
+                self._SetImagePictureBoxOutput2(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg')
             else:
                 self._SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
                 self._SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
 
     def _ButtonClearClicked(self):
-        for index in range(len(self.image_process.temp_images)):
+        for index in range(len(self.image_processing.temp_images)):
             os.remove(f'Data/Temp/Temp{index}.jpg')
-            self.image_process.temp_images.clear()
+            self.image_processing.temp_images.clear()
         self.listBoxImages.clear()
-        self.image_process.image = self.image_process.original_image
+        self.image_processing.image = self.image_processing.original_image
         self._SetImagePictureBoxOutput(f'Data/Temp/Original.jpg')
         self._SetImagePictureBoxOutput2(f'Data/Temp/Original.jpg')
 
@@ -160,8 +162,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self._SetSpinBoxes(self.method_parameters[self.comboBoxCategory.currentText()][value])
 
     def closeEvent(self, event):
-        if len(self.image_process.temp_images) > 0:
-            for i in range(len(self.image_process.temp_images)):
+        if len(self.image_processing.temp_images) > 0:
+            for i in range(len(self.image_processing.temp_images)):
                 os.remove(f'Data/Temp/Temp{i}.jpg')
         if os.path.exists('Data/Temp/Original.jpg'):
             os.remove('Data/Temp/Original.jpg')
@@ -229,7 +231,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             text.append(f"matrix:\n {self._GetKernel()}")
             method['matrix'] = self._GetKernel()
         text = "<br>".join(text)
-        text += f"<br><img src='Data/Temp/Temp{len(self.image_process.temp_images)}.jpg'>"
+        text += f"<br><img src='Data/Temp/Temp{len(self.image_processing.temp_images)}.jpg'>"
         return text, method
 
     def _GetConfiguration(self):
@@ -281,103 +283,103 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def _ApplyBlurMethod(self, name, index):
         if name == "Average":
-            self.image_process.image = \
-                self.image_process.blur.Average(image=self.image_process.image,
-                                                ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.blur.Average(image=self.image_processing.image,
+                                                   ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Bilateral":
-            self.image_process.image = \
-                self.image_process.blur.Bilateral(image=self.image_process.image,
-                                                  fsize=self.image_process.temp_images[index]['filter size'],
-                                                  sigmaColor=self.image_process.temp_images[index]['sigma color'],
-                                                  sigmaSpace=self.image_process.temp_images[index]['sigma space'])
+            self.image_processing.image = \
+                self.image_processing.blur.Bilateral(image=self.image_processing.image,
+                                                     fsize=self.image_processing.temp_images[index]['filter size'],
+                                                     sigmaColor=self.image_processing.temp_images[index]['sigma color'],
+                                                     sigmaSpace=self.image_processing.temp_images[index]['sigma space'])
         elif name == "Gaussian":
-            self.image_process.image = \
-                self.image_process.blur.Gaussian(image=self.image_process.image,
-                                                 ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.blur.Gaussian(image=self.image_processing.image,
+                                                    ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Median":
-            self.image_process.image = \
-                self.image_process.blur.Median(image=self.image_process.image,
-                                               ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.blur.Median(image=self.image_processing.image,
+                                                  ksize=self.image_processing.temp_images[index]['kernel size'])
 
     def _ApplyEdgeDetectionMethod(self, name, index):
         if name == "Canny":
-            self.image_process.image = \
-                self.image_process.edge_detection.Canny(image=self.image_process.image,
-                                                        thresh1=self.image_process.temp_images[index]['first thresh'],
-                                                        thresh2=self.image_process.temp_images[index]['second thresh'])
+            self.image_processing.image = \
+                self.image_processing.edge_detection.Canny(image=self.image_processing.image,
+                                                           thresh1=self.image_processing.temp_images[index]['first thresh'],
+                                                           thresh2=self.image_processing.temp_images[index]['second thresh'])
         elif name == "Laplacian":
-            self.image_process.image = self.image_process.edge_detection.Laplacian(image=self.image_process.image)
+            self.image_processing.image = self.image_processing.edge_detection.Laplacian(image=self.image_processing.image)
         elif name == "Sobel":
-            self.image_process.image = \
-                self.image_process.edge_detection.SobelX(image=self.image_process.image,
-                                                         ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.edge_detection.SobelX(image=self.image_processing.image,
+                                                            ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Sobel X":
-            self.image_process.image = \
-                self.image_process.edge_detection.SobelX(image=self.image_process.image,
-                                                         ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.edge_detection.SobelX(image=self.image_processing.image,
+                                                            ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Sobel Y":
-            self.image_process.image = \
-                self.image_process.edge_detection.SobelY(image=self.image_process.image,
-                                                         ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.edge_detection.SobelY(image=self.image_processing.image,
+                                                            ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Scharr X":
-            self.image_process.image = self.image_process.edge_detection.ScharrX(image=self.image_process.image)
+            self.image_processing.image = self.image_processing.edge_detection.ScharrX(image=self.image_processing.image)
         elif name == "Scharr Y":
-            self.image_process.image = self.image_process.edge_detection.ScharrY(image=self.image_process.image)
+            self.image_processing.image = self.image_processing.edge_detection.ScharrY(image=self.image_processing.image)
         elif name == "Simple Thresholding":
-            self.image_process.image = \
-                self.image_process.edge_detection.SimpleThresholding(
-                    image=self.image_process.image, thresh=self.image_process.temp_images[index]['thresh'])
+            self.image_processing.image = \
+                self.image_processing.edge_detection.SimpleThresholding(
+                    image=self.image_processing.image, thresh=self.image_processing.temp_images[index]['thresh'])
         elif name == "Adaptive Thresholding":
-            self.image_process.image = self.image_process.edge_detection.AdaptiveThresholding(
-                image=self.image_process.image,
-                area=self.image_process.temp_images[index]['area'],
-                const=self.image_process.temp_images[index]['const'])
+            self.image_processing.image = self.image_processing.edge_detection.AdaptiveThresholding(
+                image=self.image_processing.image,
+                area=self.image_processing.temp_images[index]['area'],
+                const=self.image_processing.temp_images[index]['const'])
 
     def _ApplyMorphologyMethod(self, name, index):
         if name == "Open":
-            self.image_process.image = \
-                self.image_process.morphology.Open(
-                    image=self.image_process.image,
-                    ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.morphology.Open(
+                    image=self.image_processing.image,
+                    ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Close":
-            self.image_process.image = \
-                self.image_process.morphology.Close(
-                    image=self.image_process.image,
-                    ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.morphology.Close(
+                    image=self.image_processing.image,
+                    ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Gradient":
-            self.image_process.image = \
-                self.image_process.morphology.Gradient(
-                    image=self.image_process.image,
-                    ksize=self.image_process.temp_images[index]['kernel size'])
+            self.image_processing.image = \
+                self.image_processing.morphology.Gradient(
+                    image=self.image_processing.image,
+                    ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Dilate":
-            self.image_process.image = \
-                self.image_process.morphology.Dilate(
-                    image=self.image_process.image,
-                    ksize=self.image_process.temp_images[index]['kernel size'],
-                    iterations=self.image_process.temp_images[index]['iterations'])
+            self.image_processing.image = \
+                self.image_processing.morphology.Dilate(
+                    image=self.image_processing.image,
+                    ksize=self.image_processing.temp_images[index]['kernel size'],
+                    iterations=self.image_processing.temp_images[index]['iterations'])
         elif name == "Erode":
-            self.image_process.image = \
-                self.image_process.morphology.Erode(
-                    image=self.image_process.image,
-                    ksize=self.image_process.temp_images[index]['kernel size'],
-                    iterations=self.image_process.temp_images[index]['iterations'])
+            self.image_processing.image = \
+                self.image_processing.morphology.Erode(
+                    image=self.image_processing.image,
+                    ksize=self.image_processing.temp_images[index]['kernel size'],
+                    iterations=self.image_processing.temp_images[index]['iterations'])
 
     def _ApplyKernelMethod(self, name, index):
         if name == "Sharpen":
-            self.image_process.image = \
-                self.image_process.kernel.Sharpen(self.image_process.image,
-                                                  self.image_process.temp_images[index]['matrix'])
+            self.image_processing.image = \
+                self.image_processing.kernel.Sharpen(self.image_processing.image,
+                                                     self.image_processing.temp_images[index]['matrix'])
         elif name == "Your variant":
-            self.image_process.image = \
-                self.image_process.kernel.YourVariant(self.image_process.image,
-                                                      self.image_process.temp_images[index]['matrix'])
+            self.image_processing.image = \
+                self.image_processing.kernel.YourVariant(self.image_processing.image,
+                                                         self.image_processing.temp_images[index]['matrix'])
 
     # ROBOT EVENTS AND FUNCTIONAL
     def _FindContours(self):
-        if len(self.image_process.temp_images) == 0:
-            self.image_process.image = cv2.imread('Data/Temp/Original.jpg')
+        if len(self.image_processing.temp_images) == 0:
+            self.image_processing.image = cv2.imread('Data/Temp/Original.jpg')
         else:
-            self.image_process.image = cv2.imread(f'Data/Temp/Temp{len(self.image_process.temp_images) - 1}.jpg')
+            self.image_processing.image = cv2.imread(f'Data/Temp/Temp{len(self.image_processing.temp_images) - 1}.jpg')
         thresh = self.spinBoxThreshold.value()
         area = self.spinBoxArea.value()
         approx_type = self.comboBoxApprox.currentText()
@@ -387,17 +389,20 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             approx_type = cv2.CHAIN_APPROX_TC89_KCOS
         elif approx_type == "TC89_L1":
             approx_type = cv2.CHAIN_APPROX_TC89_L1
-        contours = FindContours(self.image_process.image, thresh, area, approx_type)[0]
-        clean_contours = FindContours(self.image_process.image, thresh, area, approx_type)[1]
-        self.image_process.image = FindContours(self.image_process.image, thresh, area, approx_type)[2]
+        contours = \
+            self.robot_interaction.contours.FindContours(self.image_processing.image, thresh, area, approx_type)[0]
+        clean_contours = \
+            self.robot_interaction.contours.FindContours(self.image_processing.image, thresh, area, approx_type)[1]
+        self.image_processing.image = \
+            self.robot_interaction.contours.FindContours(self.image_processing.image, thresh, area, approx_type)[2]
         self.textBoxTotal.setText(str(len(contours)))
         self.textBoxClean.setText(str(len(clean_contours)))
-        cv2.imwrite('Data/Temp/Contours.jpg', self.image_process.image)
+        cv2.imwrite('Data/Temp/Contours.jpg', self.image_processing.image)
         self._SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
         return clean_contours
 
     def _DefineImageOrientation(self):
-        height, width = self.image_process.original_image.shape[:2]
+        height, width = self.image_processing.original_image.shape[:2]
         if height >= width:
             orientation = True  # вертикальная ориентация
         elif height < width:
@@ -405,7 +410,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         return orientation
 
     def _GetScalePercent(self):
-        height, width = self.image_process.original_image.shape[:2]
+        height, width = self.image_processing.original_image.shape[:2]
         ref_height = 800
         ref_width = 525
         ref_diagonal = math.sqrt(ref_height*ref_height + ref_width*ref_width)
@@ -424,28 +429,41 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         return x, y, z
 
     def _MoveToInitPosition(self):
-        QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет поиск листа. Будьте осторожны.")
+        self.buttonInitPosition.setEnabled(False)
+        self.buttonDraw.setEnabled(False)
+        self.buttonStop.setEnabled(True)
+        QMessageBox.about(self, "Предупреждение", "Сейчас робот будет двигаться в начальную позицию. Будьте осторожны.")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
         x, y, z = self._InitCoordinates()
-        MoveToInitPosition(ip, speed, x, y, z)
+        self.robot_interaction.robot_control.MoveToInitPosition(ip, speed, x, y, z)
         QMessageBox.about(self, " ", "Робот в начальной позиции и готов к рисованию.")
+        self.buttonDraw.setEnabled(True)
+        self.buttonStop.setEnabled(False)
 
     def _Draw(self):
+        self.buttonInitPosition.setEnabled(False)
+        self.buttonDraw.setEnabled(False)
+        self.buttonStop.setEnabled(True)
         QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет рисование. Будьте осторожны.")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
         x, y, z = self._InitCoordinates()
         clean_contours = self._FindContours()
         scale_percent = self._GetScalePercent()
-        Draw(ip, speed, x, y, z, clean_contours, scale_percent)
+        self.robot_interaction.robot_control.Draw(ip, speed, x, y, z, clean_contours, scale_percent)
         QMessageBox.about(self, " ", "Рисование окончено. Можете забрать рисунок.")
+        self.buttonInitPosition.setEnabled(True)
+        self.buttonStop.setEnabled(False)
         # сравниваем ориентации изображения и листа (у листа всегда вертикально)
         # если совпадают, то clean_contours остаются собой
         # если не совпадают, то переворачиваем изобрадение и вызываем FindContours()[1], чего пользователь не видит
 
     def _Stop(self):
         ip = self.textBoxIP.text()
-        Stop(ip)
+        self.robot_interaction.robot_control.Stop(ip)
         QMessageBox.about(self, " ", "Робот остановлен. Чтобы начать рисование, "
                                      "роботу необходимо вернуться в начальную позицию.")
+        self.buttonInitPosition.setEnabled(True)
+        self.buttonDraw.setEnabled(False)
+        self.buttonStop.setEnabled(False)

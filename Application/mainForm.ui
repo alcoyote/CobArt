@@ -12,20 +12,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>720</height>
+    <width>1366</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1280</width>
-    <height>720</height>
+    <width>1366</width>
+    <height>768</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1280</width>
-    <height>720</height>
+    <width>1366</width>
+    <height>768</height>
    </size>
   </property>
   <property name="contextMenuPolicy">
@@ -1319,8 +1319,8 @@ ColorButton::disabled {
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1280</width>
-      <height>720</height>
+      <width>1366</width>
+      <height>768</height>
      </rect>
     </property>
     <property name="font">
@@ -1346,8 +1346,8 @@ ColorButton::disabled {
        <rect>
         <x>20</x>
         <y>40</y>
-        <width>900</width>
-        <height>630</height>
+        <width>990</width>
+        <height>675</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -1375,10 +1375,10 @@ ColorButton::disabled {
      <widget class="QGroupBox" name="groupBoxOriginal">
       <property name="geometry">
        <rect>
-        <x>940</x>
+        <x>1025</x>
         <y>0</y>
         <width>320</width>
-        <height>200</height>
+        <height>230</height>
        </rect>
       </property>
       <property name="font">
@@ -1398,7 +1398,7 @@ ColorButton::disabled {
          <x>14</x>
          <y>30</y>
          <width>291</width>
-         <height>161</height>
+         <height>191</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -1427,10 +1427,10 @@ ColorButton::disabled {
      <widget class="QGroupBox" name="groupBoxHistory">
       <property name="geometry">
        <rect>
-        <x>940</x>
-        <y>200</y>
+        <x>1025</x>
+        <y>230</y>
         <width>320</width>
-        <height>191</height>
+        <height>211</height>
        </rect>
       </property>
       <property name="font">
@@ -1456,7 +1456,7 @@ ColorButton::disabled {
          <x>10</x>
          <y>30</y>
          <width>295</width>
-         <height>120</height>
+         <height>140</height>
         </rect>
        </property>
        <property name="font">
@@ -1499,7 +1499,7 @@ ColorButton::disabled {
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>155</y>
+         <y>175</y>
          <width>120</width>
          <height>30</height>
         </rect>
@@ -1538,7 +1538,7 @@ ColorButton::disabled {
        <property name="geometry">
         <rect>
          <x>170</x>
-         <y>155</y>
+         <y>175</y>
          <width>120</width>
          <height>30</height>
         </rect>
@@ -1574,8 +1574,8 @@ ColorButton::disabled {
      <widget class="QGroupBox" name="groupBoxCommands">
       <property name="geometry">
        <rect>
-        <x>940</x>
-        <y>390</y>
+        <x>1025</x>
+        <y>440</y>
         <width>320</width>
         <height>275</height>
        </rect>
@@ -2184,8 +2184,8 @@ ColorButton::disabled {
        <rect>
         <x>20</x>
         <y>40</y>
-        <width>900</width>
-        <height>630</height>
+        <width>990</width>
+        <height>675</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -2213,8 +2213,8 @@ ColorButton::disabled {
      <widget class="QGroupBox" name="groupBoxContours">
       <property name="geometry">
        <rect>
-        <x>940</x>
-        <y>200</y>
+        <x>1025</x>
+        <y>230</y>
         <width>320</width>
         <height>181</height>
        </rect>
@@ -2326,7 +2326,7 @@ ColorButton::disabled {
       <widget class="QLabel" name="labelContours3">
        <property name="geometry">
         <rect>
-         <x>80</x>
+         <x>75</x>
          <y>120</y>
          <width>231</width>
          <height>20</height>
@@ -2347,7 +2347,7 @@ ColorButton::disabled {
       <widget class="QLabel" name="labelContours4">
        <property name="geometry">
         <rect>
-         <x>80</x>
+         <x>75</x>
          <y>150</y>
          <width>231</width>
          <height>20</height>
@@ -2434,7 +2434,7 @@ ColorButton::disabled {
       <widget class="QLabel" name="labelContours5">
        <property name="geometry">
         <rect>
-         <x>170</x>
+         <x>165</x>
          <y>90</y>
          <width>141</width>
          <height>20</height>
@@ -2456,10 +2456,10 @@ ColorButton::disabled {
      <widget class="QGroupBox" name="groupBoxProcessed">
       <property name="geometry">
        <rect>
-        <x>940</x>
+        <x>1025</x>
         <y>0</y>
         <width>320</width>
-        <height>200</height>
+        <height>230</height>
        </rect>
       </property>
       <property name="font">
@@ -2479,7 +2479,7 @@ ColorButton::disabled {
          <x>14</x>
          <y>30</y>
          <width>291</width>
-         <height>161</height>
+         <height>191</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -2508,8 +2508,8 @@ ColorButton::disabled {
      <widget class="QGroupBox" name="groupBoxRobot">
       <property name="geometry">
        <rect>
-        <x>940</x>
-        <y>380</y>
+        <x>1025</x>
+        <y>410</y>
         <width>321</width>
         <height>91</height>
        </rect>
@@ -2549,7 +2549,7 @@ ColorButton::disabled {
       <widget class="QLabel" name="labelRobot1">
        <property name="geometry">
         <rect>
-         <x>170</x>
+         <x>165</x>
          <y>30</y>
          <width>141</width>
          <height>20</height>
@@ -2622,8 +2622,8 @@ ColorButton::disabled {
       </property>
       <property name="geometry">
        <rect>
-        <x>1040</x>
-        <y>490</y>
+        <x>1125</x>
+        <y>520</y>
         <width>120</width>
         <height>30</height>
        </rect>
@@ -2661,8 +2661,8 @@ ColorButton::disabled {
       </property>
       <property name="geometry">
        <rect>
-        <x>1040</x>
-        <y>530</y>
+        <x>1125</x>
+        <y>560</y>
         <width>120</width>
         <height>30</height>
        </rect>
@@ -2700,8 +2700,8 @@ ColorButton::disabled {
       </property>
       <property name="geometry">
        <rect>
-        <x>1040</x>
-        <y>570</y>
+        <x>1125</x>
+        <y>600</y>
         <width>120</width>
         <height>30</height>
        </rect>
