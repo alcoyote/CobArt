@@ -1571,7 +1571,7 @@ ColorButton::disabled {
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBoxCommands">
+     <widget class="QGroupBox" name="groupBoxOperations">
       <property name="geometry">
        <rect>
         <x>1025</x>
@@ -1592,7 +1592,7 @@ ColorButton::disabled {
        <string notr="true"/>
       </property>
       <property name="title">
-       <string>Commands</string>
+       <string>Operations</string>
       </property>
       <widget class="QComboBox" name="comboBoxCategory">
        <property name="geometry">
@@ -2099,7 +2099,7 @@ ColorButton::disabled {
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="buttonPhoto">
+     <widget class="QPushButton" name="buttonTakePhoto">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -2123,7 +2123,7 @@ ColorButton::disabled {
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="text">
-       <string>Photo</string>
+       <string>Take Photo</string>
       </property>
       <property name="autoDefault">
        <bool>false</bool>

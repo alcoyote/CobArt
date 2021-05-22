@@ -34,13 +34,13 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonSaveImage.setEnabled(False)
         self.groupBoxOriginal.setEnabled(False)
         self.groupBoxHistory.setEnabled(False)
-        self.groupBoxCommands.setEnabled(False)
+        self.groupBoxOperations.setEnabled(False)
         self.buttonDraw.setEnabled(False)
         self.buttonStop.setEnabled(False)
 
         # Buttons
         self.buttonLoadImage.clicked.connect(self._ButtonLoadImageClicked)
-        self.buttonPhoto.clicked.connect(self._ButtonPhotoClicked)
+        self.buttonTakePhoto.clicked.connect(self._ButtonTakePhotoClicked)
         self.buttonSaveImage.clicked.connect(self._ButtonSaveImageClicked)
         self.buttonApply.clicked.connect(self._ButtonApplyClicked)
         self.buttonRemove.clicked.connect(self._ButtonRemoveClicked)
@@ -85,7 +85,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self.listBoxImages.clear()
             self._SetAccessToControlElements()
 
-    def _ButtonPhotoClicked(self):
+    def _ButtonTakePhotoClicked(self):
         camera = cv2.VideoCapture(0)
         while True:
             ret, frame = camera.read()
@@ -190,7 +190,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonSaveImage.setEnabled(True)
         self.groupBoxOriginal.setEnabled(True)
         self.groupBoxHistory.setEnabled(True)
-        self.groupBoxCommands.setEnabled(True)
+        self.groupBoxOperations.setEnabled(True)
 
     def _SetImagePictureBoxOriginal(self, image_path):
         # Picture Box Original
