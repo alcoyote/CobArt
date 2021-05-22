@@ -2231,7 +2231,7 @@ ColorButton::disabled {
        <string notr="true"/>
       </property>
       <property name="title">
-       <string>Contours detection</string>
+       <string>Contours Detection</string>
       </property>
       <widget class="QSpinBox" name="spinBoxThreshold">
        <property name="enabled">
@@ -2523,7 +2523,7 @@ ColorButton::disabled {
        </font>
       </property>
       <property name="title">
-       <string>Robot parameters</string>
+       <string>Robot Parameters</string>
       </property>
       <widget class="QLineEdit" name="textBoxIP">
        <property name="geometry">
