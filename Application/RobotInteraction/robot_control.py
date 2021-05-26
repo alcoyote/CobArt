@@ -1,24 +1,22 @@
 from pulserest.robot import Position
 from pulserest import *
-import time
 
 
 class RobotControl:
-    def MoveToInitPosition(self, ip, speed, x, y, z):  # переделать под поиск листика
+    def MoveToInitPosition(self, ip, speed, x, y, z):
         robot = RobotPulse(ip)
         init_position = Position(Point(x, y, z), Rotation(3.1415, 0, 0))
         robot.set_position(init_position, speed)
         robot.await_motion()
 
     def Draw(self, ip, speed, x, y, z, clean_contours, scale_percent):
-        time_start = time.time()
         robot = RobotPulse(ip)
 
         x_list = []  # тест
         y_list = []  # тест
         point_list = []  # тест
 
-        for i in range(1, len(clean_contours)):
+        for i in range(0, len(clean_contours)):
             robot.run_positions([Position(Point(x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent),
                                                 y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent),
                                                 z),
@@ -36,7 +34,7 @@ class RobotControl:
             # for j in range(len(clean_contours[i])):
             #     x_list.append(x + (clean_contours[i][j][0][0] * 0.0002))
             #     y_list.append(y + (clean_contours[i][j][0][1] * 0.0002))
-            # robot.run_positions([Position(Point(x_list,  # [list[Position]]
+            # robot.run_positions([Position(Point(x_list,
             #                                     y_list,
             #                                     z - 0.105),
             #                               Rotation(3.1415, 0, 0))], speed, MT_JOINT)
@@ -50,7 +48,6 @@ class RobotControl:
                                                   z - 0.105),
                                             Rotation(3.1415, 0, 0))])
             robot.run_positions(point_list, speed, MT_JOINT)
-            # print(len(point_list))
             point_list.clear()
             # # # --------------------------------------------------------------------- # # #
 
@@ -61,13 +58,12 @@ class RobotControl:
                                  Position(Point(x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent),
                                                 y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent),
                                                 z),
-                                          Rotation(3.1415, 0, 0))], speed, MT_LINEAR)  # подъем для переход в след. контур
+                                          Rotation(3.1415, 0, 0))],  # подъем для перехода в след. контур
+                                speed, MT_LINEAR)
             robot.await_motion()
         init_position = Position(Point(x, y, z), Rotation(3.1415, 0, 0))
         robot.set_position(init_position, 10)
         robot.await_motion()
-        time_finish = time.time()
-        print("Time: " + time_finish - time_start)
 
     def Stop(self, ip):
         robot = RobotPulse(ip)

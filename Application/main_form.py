@@ -6,6 +6,7 @@ import io
 import contextlib
 import os
 import math
+import time
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QListWidgetItem
@@ -308,7 +309,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                                                            thresh1=self.image_processing.temp_images[index]['first thresh'],
                                                            thresh2=self.image_processing.temp_images[index]['second thresh'])
         elif name == "Laplacian":
-            self.image_processing.image = self.image_processing.edge_detection.Laplacian(image=self.image_processing.image)
+            self.image_processing.image = \
+                self.image_processing.edge_detection.Laplacian(image=self.image_processing.image)
         elif name == "Sobel":
             self.image_processing.image = \
                 self.image_processing.edge_detection.SobelX(image=self.image_processing.image,
@@ -322,25 +324,26 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.image_processing.edge_detection.SobelY(image=self.image_processing.image,
                                                             ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Scharr X":
-            self.image_processing.image = self.image_processing.edge_detection.ScharrX(image=self.image_processing.image)
+            self.image_processing.image = \
+                self.image_processing.edge_detection.ScharrX(image=self.image_processing.image)
         elif name == "Scharr Y":
-            self.image_processing.image = self.image_processing.edge_detection.ScharrY(image=self.image_processing.image)
+            self.image_processing.image = \
+                self.image_processing.edge_detection.ScharrY(image=self.image_processing.image)
         elif name == "Simple Thresholding":
             self.image_processing.image = \
-                self.image_processing.edge_detection.SimpleThresholding(
-                    image=self.image_processing.image, thresh=self.image_processing.temp_images[index]['thresh'])
+                self.image_processing.edge_detection.SimpleThresholding(image=self.image_processing.image,
+                                                                        thresh=self.image_processing.temp_images[index]['thresh'])
         elif name == "Adaptive Thresholding":
-            self.image_processing.image = self.image_processing.edge_detection.AdaptiveThresholding(
-                image=self.image_processing.image,
-                area=self.image_processing.temp_images[index]['area'],
-                const=self.image_processing.temp_images[index]['const'])
+            self.image_processing.image = \
+                self.image_processing.edge_detection.AdaptiveThresholding(image=self.image_processing.image,
+                                                                          area=self.image_processing.temp_images[index]['area'],
+                                                                          const=self.image_processing.temp_images[index]['const'])
 
     def _ApplyMorphologyMethod(self, name, index):
         if name == "Open":
             self.image_processing.image = \
-                self.image_processing.morphology.Open(
-                    image=self.image_processing.image,
-                    ksize=self.image_processing.temp_images[index]['kernel size'])
+                self.image_processing.morphology.Open(image=self.image_processing.image,
+                                                      ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Close":
             self.image_processing.image = \
                 self.image_processing.morphology.Close(
@@ -348,21 +351,18 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                     ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Gradient":
             self.image_processing.image = \
-                self.image_processing.morphology.Gradient(
-                    image=self.image_processing.image,
-                    ksize=self.image_processing.temp_images[index]['kernel size'])
+                self.image_processing.morphology.Gradient(image=self.image_processing.image,
+                                                          ksize=self.image_processing.temp_images[index]['kernel size'])
         elif name == "Dilate":
             self.image_processing.image = \
-                self.image_processing.morphology.Dilate(
-                    image=self.image_processing.image,
-                    ksize=self.image_processing.temp_images[index]['kernel size'],
-                    iterations=self.image_processing.temp_images[index]['iterations'])
+                self.image_processing.morphology.Dilate(image=self.image_processing.image,
+                                                        ksize=self.image_processing.temp_images[index]['kernel size'],
+                                                        iterations=self.image_processing.temp_images[index]['iterations'])
         elif name == "Erode":
             self.image_processing.image = \
-                self.image_processing.morphology.Erode(
-                    image=self.image_processing.image,
-                    ksize=self.image_processing.temp_images[index]['kernel size'],
-                    iterations=self.image_processing.temp_images[index]['iterations'])
+                self.image_processing.morphology.Erode(image=self.image_processing.image,
+                                                       ksize=self.image_processing.temp_images[index]['kernel size'],
+                                                       iterations=self.image_processing.temp_images[index]['iterations'])
 
     def _ApplyKernelMethod(self, name, index):
         if name == "Sharpen":
@@ -401,18 +401,10 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self._SetImagePictureBoxOutput2('Data/Temp/Contours.jpg')
         return clean_contours
 
-    def _DefineImageOrientation(self):
-        height, width = self.image_processing.original_image.shape[:2]
-        if height >= width:
-            orientation = True  # вертикальная ориентация
-        elif height < width:
-            orientation = False  # горизонтальная ориентация
-        return orientation
-
     def _GetScalePercent(self):
         height, width = self.image_processing.original_image.shape[:2]
-        ref_height = 800
-        ref_width = 525
+        ref_height = 900
+        ref_width = 900
         ref_diagonal = math.sqrt(ref_height*ref_height + ref_width*ref_width)
         diagonal = math.sqrt(height*height + width*width)
         if diagonal > ref_diagonal:
@@ -432,12 +424,12 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonInitPosition.setEnabled(False)
         self.buttonDraw.setEnabled(False)
         self.buttonStop.setEnabled(True)
-        QMessageBox.about(self, "Предупреждение", "Сейчас робот будет двигаться в начальную позицию. Будьте осторожны.")
+        QMessageBox.about(self, "WARNING", "Robot is going to move to init position. Be careful")
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
         x, y, z = self._InitCoordinates()
         self.robot_interaction.robot_control.MoveToInitPosition(ip, speed, x, y, z)
-        QMessageBox.about(self, " ", "Робот в начальной позиции и готов к рисованию.")
+        QMessageBox.about(self, "Message", "Robot is in init position and ready for drawing")
         self.buttonDraw.setEnabled(True)
         self.buttonStop.setEnabled(False)
 
@@ -445,25 +437,24 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.buttonInitPosition.setEnabled(False)
         self.buttonDraw.setEnabled(False)
         self.buttonStop.setEnabled(True)
-        QMessageBox.about(self, "Предупреждение", "Сейчас робот начнет рисование. Будьте осторожны.")
+        QMessageBox.about(self, "WARNING", "Robot is going to draw. Be careful")
+        time_start = time.time()
         ip = self.textBoxIP.text()
         speed = self.spinBoxSpeed.value()
         x, y, z = self._InitCoordinates()
         clean_contours = self._FindContours()
         scale_percent = self._GetScalePercent()
         self.robot_interaction.robot_control.Draw(ip, speed, x, y, z, clean_contours, scale_percent)
-        QMessageBox.about(self, " ", "Рисование окончено. Можете забрать рисунок.")
+        time_finish = time.time()
+        QMessageBox.about(self, "Message", "Drawing done in: " + str('{:.2f}'.format(time_finish-time_start))
+                          + ". You can take paper")
         self.buttonInitPosition.setEnabled(True)
         self.buttonStop.setEnabled(False)
-        # сравниваем ориентации изображения и листа (у листа всегда вертикально)
-        # если совпадают, то clean_contours остаются собой
-        # если не совпадают, то переворачиваем изобрадение и вызываем FindContours()[1], чего пользователь не видит
 
     def _Stop(self):
         ip = self.textBoxIP.text()
         self.robot_interaction.robot_control.Stop(ip)
-        QMessageBox.about(self, " ", "Робот остановлен. Чтобы начать рисование, "
-                                     "роботу необходимо вернуться в начальную позицию.")
+        QMessageBox.about(self, "Message", "Robot stooped. Robot has to go to init position")
         self.buttonInitPosition.setEnabled(True)
         self.buttonDraw.setEnabled(False)
         self.buttonStop.setEnabled(False)

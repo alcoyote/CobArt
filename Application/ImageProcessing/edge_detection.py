@@ -6,19 +6,18 @@ class EdgeDetection:
         return cv2.Canny(image, thresh1, thresh2)
 
     def Laplacian(self, image):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return cv2.Laplacian(image, -1)
 
     def SobelX(self, image, ksize):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return cv2.Sobel(image, -1, 1, 0, ksize=ksize)
 
     def SobelY(self, image, ksize):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return cv2.Sobel(image, -1, 0, 1, ksize=ksize)
 
     def Sobel(self, image, ksize):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         gradient_x = self.SobelX(image.copy(), ksize)
         gradient_y = self.ScharrY(image.copy(), ksize)
         gradient_x = cv2.convertScaleAbs(gradient_x)
@@ -26,11 +25,11 @@ class EdgeDetection:
         return cv2.addWeighted(gradient_x, 0.5, gradient_y, 0.5, 0)
 
     def ScharrX(self, image):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return cv2.Scharr(image, -1, 1, 0)
 
     def ScharrY(self, image):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return cv2.Scharr(image, -1, 0, 1)
 
     def SimpleThresholding(self, image, thresh):
