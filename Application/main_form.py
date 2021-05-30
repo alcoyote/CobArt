@@ -367,12 +367,12 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
     def _ApplyKernelMethod(self, name, index):
         if name == "Sharpen":
             self.image_processing.image = \
-                self.image_processing.kernel.Sharpen(self.image_processing.image,
-                                                     self.image_processing.temp_images[index]['matrix'])
+                self.image_processing.sharpening.Sharpen(self.image_processing.image,
+                                                         self.image_processing.temp_images[index]['matrix'])
         elif name == "Your variant":
             self.image_processing.image = \
-                self.image_processing.kernel.YourVariant(self.image_processing.image,
-                                                         self.image_processing.temp_images[index]['matrix'])
+                self.image_processing.sharpening.YourVariant(self.image_processing.image,
+                                                             self.image_processing.temp_images[index]['matrix'])
 
     # ROBOT EVENTS AND FUNCTIONAL
     def _FindContours(self):

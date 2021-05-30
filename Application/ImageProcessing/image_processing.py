@@ -10,6 +10,6 @@ class ImageProcessing:
         self.original_image = None
         self.temp_images = []
         self.blur = Blur()
-        self.kernel = SharpeningWithKernel()
+        self.sharpening = SharpeningWithKernel()
         self.edge_detection = EdgeDetection()
         self.morphology = Morphology()
