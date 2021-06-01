@@ -415,9 +415,9 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             return scale_percent
 
     def _InitCoordinates(self):
-        x = 0.583
-        y = -0.161
-        z = 0.33
+        x = 0.087
+        y = 0.379
+        z = 0.3  # 0.126
         return x, y, z
 
     def _MoveToInitPosition(self):
@@ -447,7 +447,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self.robot_interaction.robot_control.Draw(ip, speed, x, y, z, clean_contours, scale_percent)
         time_finish = time.time()
         QMessageBox.about(self, "Message", "Drawing done in: " + str('{:.2f}'.format(time_finish-time_start))
-                          + ". You can take paper")
+                          + " seconds. You can take paper")
         self.buttonInitPosition.setEnabled(True)
         self.buttonStop.setEnabled(False)
 

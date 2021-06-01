@@ -1,68 +1,51 @@
-from pulserest.robot import Position
-from pulserest import *
+from pulseapi import *
 
 
 class RobotControl:
     def MoveToInitPosition(self, ip, speed, x, y, z):
         robot = RobotPulse(ip)
-        init_position = Position(Point(x, y, z), Rotation(3.1415, 0, 0))
+        init_position = position([x, y, z], [3.1415, 0, 0])
         robot.set_position(init_position, speed)
         robot.await_motion()
 
     def Draw(self, ip, speed, x, y, z, clean_contours, scale_percent):
         robot = RobotPulse(ip)
+        positions_list = []
 
-        x_list = []  # тест
-        y_list = []  # тест
-        point_list = []  # тест
+        for i in range(1, len(clean_contours)):
+            # Up beginning of the contour
+            x_temp = x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent)
+            y_temp = y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent)
+            z_temp = z
+            zero_point = position([x_temp, y_temp, z_temp], [3.1415, 0, 0])
+            robot.set_position(zero_point, speed, motion_type=MT_JOINT)
 
-        for i in range(0, len(clean_contours)):
-            robot.run_positions([Position(Point(x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent),
-                                                y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent),
-                                                z),
-                                          Rotation(3.1415, 0, 0))], speed, MT_JOINT)  # в начало контура, не опускаемся
-
-            # # # --- ПЕРВЫЙ ВАРИАНТ РИСОВАНИЯ, ПОДАЧА РОБОТУ ПО ОДНОЙ ТОЧКЕ --- # # #
-            # for j in range(len(clean_contours[i])):
-            #     if j % 2 == 0:
-            #         robot.run_positions([Position(Point(x + (clean_contours[i][j][0][0] * 0.0002),
-            #                                             y + (clean_contours[i][j][0][1] * 0.0002),
-            #                                             z - 0.105),
-            #                                       Rotation(3.1415, 0, 0))], speed, MT_JOINT)
-
-            # # # --- ТЕСТОВЫЙ ВАРИАНТ РИСОВАНИЯ №1, ПОДАЧА РОБОТУ ЦЕЛЫХ МАССИВОВ ТОЧЕК --- # # #
-            # for j in range(len(clean_contours[i])):
-            #     x_list.append(x + (clean_contours[i][j][0][0] * 0.0002))
-            #     y_list.append(y + (clean_contours[i][j][0][1] * 0.0002))
-            # robot.run_positions([Position(Point(x_list,
-            #                                     y_list,
-            #                                     z - 0.105),
-            #                               Rotation(3.1415, 0, 0))], speed, MT_JOINT)
-            # x_list.clear()
-            # y_list.clear()
-
-            # # # --- ТЕСТОВЫЙ ВАРИАНТ РИСОВАНИЯ №2, ПОДАЧА РОБОТУ ЦЕЛЫХ МАССИВОВ ТОЧЕК --- # # #
+            # Creating a list of contours points and drawing
             for j in range(len(clean_contours[i])):
-                point_list.append([Position(Point(x + (clean_contours[i][j][0][0] * 0.0002 * scale_percent),
-                                                  y + (clean_contours[i][j][0][1] * 0.0002 * scale_percent),
-                                                  z - 0.105),
-                                            Rotation(3.1415, 0, 0))])
-            robot.run_positions(point_list, speed, MT_JOINT)
-            point_list.clear()
-            # # # --------------------------------------------------------------------- # # #
+                x_temp = x + (clean_contours[i][j][0][0] * 0.0002 * scale_percent)
+                y_temp = y + (clean_contours[i][j][0][1] * 0.0002 * scale_percent)
+                z_temp = z-0.175
+                positions_list.append(position([x_temp, y_temp, z_temp], [3.1415, 0, 0]))
+            robot.run_positions(positions_list, speed, motion_type=MT_JOINT)
+            positions_list.clear()
 
-            robot.run_positions([Position(Point(x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent),
-                                                y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent),
-                                                z - 0.105),
-                                          Rotation(3.1415, 0, 0)),  # возвращение в начальную точку текущего контура
-                                 Position(Point(x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent),
-                                                y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent),
-                                                z),
-                                          Rotation(3.1415, 0, 0))],  # подъем для перехода в след. контур
-                                speed, MT_LINEAR)
+            # Returning to the first point of the current contour
+            x_temp = x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent)
+            y_temp = y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent)
+            z_temp = z-0.175
+            contour_last_point = position([x_temp, y_temp, z_temp], [3.1415, 0, 0])
+            robot.set_position(contour_last_point, speed, motion_type=MT_JOINT)
+
+            # Up for moving to the next contour
+            x_temp = x + (clean_contours[i][0][0][0] * 0.0002 * scale_percent)
+            y_temp = y + (clean_contours[i][0][0][1] * 0.0002 * scale_percent)
+            z_temp = z
+            up_point = position([x_temp, y_temp, z_temp], [3.1415, 0, 0])
+            robot.set_position(up_point, speed, motion_type=MT_LINEAR)
+
             robot.await_motion()
-        init_position = Position(Point(x, y, z), Rotation(3.1415, 0, 0))
-        robot.set_position(init_position, 10)
+        init_position = position([x, y, z], [3.1415, 0, 0])
+        robot.set_position(init_position, speed)
         robot.await_motion()
 
     def Stop(self, ip):
