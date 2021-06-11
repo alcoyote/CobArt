@@ -21,13 +21,13 @@ from RobotInteraction.robot_interaction import RobotInteraction
 class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowIcon(QIcon('Data/Resource/byAlex.ico'))
+        self.setWindowIcon(QIcon('Data/Resource/icon.png'))
         self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint | Qt.WindowTitleHint)
         self.setupUi(self)
 
         # Objects and Data
-        self.image_processing = ImageProcessing()
         self.method_parameters = self._GetConfiguration()
+        self.image_processing = ImageProcessing()
         self.robot_interaction = RobotInteraction()
 
         # Init Access to Control Elements
@@ -60,7 +60,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         self._SetComboboxItems(category=self.comboBoxCategory.currentText())
         self.comboBoxCategory.currentTextChanged.connect(self._ComboboxCategoryChanged)
         self.comboBoxType.currentTextChanged.connect(self._ComboboxTypeChanged)
-        self.comboBoxType.activated[str].connect(self._SetAccessToKernelSpinBoxes)
+        self.comboBoxType.activated[str].connect(self._SetAccessToSharpeningKernelSpinBoxes)
 
         self.approx_list = ["Simple", "TC89_KCOS", "TC89_L1"]
         self.comboBoxApprox.addItems(self.approx_list)
@@ -229,8 +229,8 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                 text.append(f"{parameters[key]['name']}: {stream.getvalue()}")
                 method[parameters[key]['name']] = int(stream.getvalue())
         if category == "Sharpening with Kernel":
-            text.append(f"matrix:\n {self._GetKernel()}")
-            method['matrix'] = self._GetKernel()
+            text.append(f"Kernel:\n {self._GetKernel()}")
+            method['kernel'] = self._GetKernel()
         text = "<br>".join(text)
         text += f"<br><img src='Data/Temp/Temp{len(self.image_processing.temp_images)}.jpg'>"
         return text, method
@@ -264,7 +264,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             exec(f'self.{key}.setValue({values["value"]})')
             exec(f'self.{key}.show()')
 
-    def _SetAccessToKernelSpinBoxes(self):
+    def _SetAccessToSharpeningKernelSpinBoxes(self):
         if self.comboBoxType.currentText() == "Sharpen":
             for i in range(1, 10):
                 exec(f'self.spinBoxKernel{i}.setEnabled(False)')
@@ -280,7 +280,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
         elif category == "Morphological Transformations":
             self._ApplyMorphologyMethod(name, index)
         elif category == "Sharpening with Kernel":
-            self._ApplyKernelMethod(name, index)
+            self._ApplySharpeningMethod(name, index)
 
     def _ApplyBlurMethod(self, name, index):
         if name == "Average":
@@ -301,6 +301,16 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
             self.image_processing.image = \
                 self.image_processing.blur.Median(image=self.image_processing.image,
                                                   ksize=self.image_processing.temp_images[index]['kernel size'])
+
+    def _ApplySharpeningMethod(self, name, index):
+        if name == "Sharpen":
+            self.image_processing.image = \
+                self.image_processing.sharpening.Sharpen(self.image_processing.image,
+                                                         self.image_processing.temp_images[index]['kernel'])
+        elif name == "Your variant":
+            self.image_processing.image = \
+                self.image_processing.sharpening.YourVariant(self.image_processing.image,
+                                                             self.image_processing.temp_images[index]['kernel'])
 
     def _ApplyEdgeDetectionMethod(self, name, index):
         if name == "Canny":
@@ -364,16 +374,6 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
                                                        ksize=self.image_processing.temp_images[index]['kernel size'],
                                                        iterations=self.image_processing.temp_images[index]['iterations'])
 
-    def _ApplyKernelMethod(self, name, index):
-        if name == "Sharpen":
-            self.image_processing.image = \
-                self.image_processing.sharpening.Sharpen(self.image_processing.image,
-                                                         self.image_processing.temp_images[index]['matrix'])
-        elif name == "Your variant":
-            self.image_processing.image = \
-                self.image_processing.sharpening.YourVariant(self.image_processing.image,
-                                                             self.image_processing.temp_images[index]['matrix'])
-
     # ROBOT EVENTS AND FUNCTIONAL
     def _FindContours(self):
         if len(self.image_processing.temp_images) == 0:
@@ -417,7 +417,7 @@ class CobArt(QtWidgets.QMainWindow, Ui_MainWindow):
     def _InitCoordinates(self):
         x = 0.087
         y = 0.379
-        z = 0.3  # 0.126
+        z = 0.15  # 0.126
         return x, y, z
 
     def _MoveToInitPosition(self):

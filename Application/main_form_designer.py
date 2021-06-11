@@ -1296,6 +1296,7 @@ class Ui_MainWindow(object):
         self.pictureBoxOutput.setFrameShadow(QtWidgets.QFrame.Plain)
         self.pictureBoxOutput.setLineWidth(1)
         self.pictureBoxOutput.setText("")
+        self.pictureBoxOutput.setPixmap(QtGui.QPixmap("Data/Resource/ImageArea.png"))
         self.pictureBoxOutput.setScaledContents(False)
         self.pictureBoxOutput.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.pictureBoxOutput.setWordWrap(False)
@@ -1315,7 +1316,7 @@ class Ui_MainWindow(object):
         self.pictureBoxOriginal.setFrameShadow(QtWidgets.QFrame.Plain)
         self.pictureBoxOriginal.setLineWidth(1)
         self.pictureBoxOriginal.setText("")
-        self.pictureBoxOriginal.setScaledContents(False)
+        self.pictureBoxOriginal.setPixmap(QtGui.QPixmap("Data/Resource/OriginalImage.png"))
         self.pictureBoxOriginal.setAlignment(QtCore.Qt.AlignCenter)
         self.pictureBoxOriginal.setWordWrap(False)
         self.pictureBoxOriginal.setObjectName("pictureBoxOriginal")
@@ -1918,4 +1919,4 @@ class Ui_MainWindow(object):
         self.buttonDraw.setText(_translate("MainWindow", "Draw"))
         self.buttonStop.setText(_translate("MainWindow", "STOP!"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabRobotInteraction), _translate("MainWindow", "Robot Interaction"))
-import style_rc
+import Data.style_rc

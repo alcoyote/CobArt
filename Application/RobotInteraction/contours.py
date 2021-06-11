@@ -9,7 +9,7 @@ class Contours:
         contours_image = cv2.drawContours(image, contours, -1, (0, 0, 255), 2)
         clean_contours = []
         for i in range(len(contours)):
-            if len(contours[i]) > 1 and cv2.contourArea(contours[i]) > area:
+            if 1 < len(contours[i]) < 1001 and cv2.contourArea(contours[i]) > area:
                 clean_contours.append(contours[i])
         clean_contours = sorted(clean_contours, key=cv2.contourArea, reverse=True)
         clean_contours_image = cv2.drawContours(contours_image, clean_contours, -1, (0, 255, 0), 2)
